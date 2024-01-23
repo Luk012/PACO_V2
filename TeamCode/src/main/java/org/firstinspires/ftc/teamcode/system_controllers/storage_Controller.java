@@ -12,6 +12,7 @@ public class storage_Controller {
         INITIALZIE,
         COLLECT,
         SCORE,
+        INTER,
     }
 
     public storage_Controller()
@@ -22,9 +23,10 @@ public class storage_Controller {
 
     public static storageStatus CS = storageStatus.INITIALZIE, PS = storageStatus.INITIALZIE;
 
-    public static double init = 0;
-    public static double collect = 0;
-    public static double score = 1;
+    public static double init = 0.048;
+    public static double inter = 0.01;
+    public static double collect = 0.048;
+    public static double score = 0.33;
 
     public void update(robotMap r)
     {
@@ -35,6 +37,12 @@ public class storage_Controller {
                 case INITIALZIE:
                 {
                     r.storage.setPosition(init);
+                    break;
+                }
+
+                case INTER:
+                {
+                    r.storage.setPosition(inter);
                     break;
                 }
 

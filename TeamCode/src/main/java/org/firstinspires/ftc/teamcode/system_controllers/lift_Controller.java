@@ -16,11 +16,11 @@ public class lift_Controller {
     }
 
     public double CurrentSpeed=0;
-    public static double P1 = 0;
-    public static double I1 = 0;
-    public static double D1 = 0;
+    public static double P1 = 0.007;
+    public static double I1 = 0.0001;
+    public static double D1 = 0.01;
 
-    public static double P2 = 0;
+    public static double P2 = 0.00133;
     public static double I2 = 0;
     public static double D2 = 0;
 
@@ -37,9 +37,9 @@ public class lift_Controller {
     int base = 0;
     int highest = 600;
 
-    public static double up = 225;
+    public static double up = 0;
     public static int upCnt = 0;
-    public static double MultiplicationIndex = 55;
+    public static double MultiplicationIndex = 90;
 
     public int CurrentPosition = 0;
 
@@ -76,7 +76,7 @@ public class lift_Controller {
 
         r.lift.setPower(powerLiftFinal);
 
-        if(CS != PS || CS == INITIALIZE)
+        if(CS != PS )
         {
             switch (CS)
             {

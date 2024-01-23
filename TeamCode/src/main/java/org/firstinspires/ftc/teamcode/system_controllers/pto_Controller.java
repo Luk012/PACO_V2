@@ -22,8 +22,8 @@ public class pto_Controller {
     public static ptoStatus CS = ptoStatus.INITIALIZE, PS = ptoStatus.INITIALIZE;
 
     public static double init = 0;
-    public static double on = 1;
-    public static double off = 0;
+    public static double on = 0.4;
+    public static double off = 0.74;
 
     public void update(robotMap r)
     {

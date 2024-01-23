@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 import org.firstinspires.ftc.teamcode.system_controllers.collectAngle_Controller;
-import org.firstinspires.ftc.teamcode.system_controllers.drone_Controller;
+//import org.firstinspires.ftc.teamcode.system_controllers.drone_Controller;
 import org.firstinspires.ftc.teamcode.system_controllers.fourBar_Controller;
 import org.firstinspires.ftc.teamcode.system_controllers.leftLatch_Controller;
 import org.firstinspires.ftc.teamcode.system_controllers.lift_Controller;
@@ -71,9 +71,10 @@ public class OpMode extends LinearOpMode {
     public void runOpMode() {
         robotMap r = new robotMap(hardwareMap);
 
+
         collectAngle_Controller collectAngle = new collectAngle_Controller();
-        drone_Controller drone = new drone_Controller();
-        fourBar_Controller fourBar = new fourBar_Controller();
+      //  drone_Controller drone = new drone_Controller();
+        fourBar_Controller fourBar = new fourBar_Controller(r);
         leftLatch_Controller leftLatch = new leftLatch_Controller();
         pto_Controller pto = new pto_Controller();
         rightLatch_Controller rightLatch = new rightLatch_Controller();
@@ -88,21 +89,21 @@ public class OpMode extends LinearOpMode {
         VoltageSensor batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
        voltage = batteryVoltageSensor.getVoltage();
 
-       collectAngle.CS = collectAngle_Controller.collectAngleStatus.INITIALIZE;
-       drone.CS = drone_Controller.droneStatus.INITIALIZE;
-       fourBar.CS = fourBar_Controller.fourbarStatus.INITIALIZE;
-       leftLatch.CS = leftLatch_Controller.leftLatchStatus.INITIALIZE;
-       pto.CS = pto_Controller.ptoStatus.INITIALIZE;
-       rightLatch.CS = rightLatch_Controller.rightLatchStatus.INITIALIZE;
+       collectAngle.CS = collectAngle_Controller.collectAngleStatus.GROUND;
+      // drone.CS = drone_Controller.droneStatus.INITIALIZE;
+       fourBar.CS = fourBar_Controller.fourbarStatus.COLLECT;
+       leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
+       pto.CS = pto_Controller.ptoStatus.OFF;
+       rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
        storageAngle.CS = storageAngle_Controller.storageAngleStatus.INITIALIZE;
-       storage.CS = storage_Controller.storageStatus.INITIALZIE;
-       lift.CS = lift_Controller.liftStatus.INITIALIZE;
+       storage.CS = storage_Controller.storageStatus.COLLECT;
+       lift.CS = lift_Controller.liftStatus.DOWN;
        outtake.CS = outtake_Controller.outtakeStatus.INITIALIZE;
 
 
 
        collectAngle.update(r);
-       drone.update(r);
+       //drone.update(r);
        fourBar.update(r);
        leftLatch.update(r);
        pto.update(r);
@@ -115,10 +116,12 @@ public class OpMode extends LinearOpMode {
 
 
         boolean StrafesOn = true;
-        boolean stack = false;
+        boolean stack = true;
 
         lift.upCnt = 0;
-        storageAngle.rotation_i = 0;
+        storageAngle.rotation_i = 2;
+        collectAngle.stack_level = 0;
+
 
 
 
@@ -143,7 +146,7 @@ public class OpMode extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
 
-            int LiftPosition = r.lift.getCurrentPosition();
+            int position = r.lift.getCurrentPosition();
 
             previousGamepad1.copy(currentGamepad1);
             previousGamepad2.copy(currentGamepad2);
@@ -159,10 +162,7 @@ public class OpMode extends LinearOpMode {
 
           collect_power = gamepad2.right_trigger- gamepad2.left_trigger;
 
-          if(pto.CS != pto_Controller.ptoStatus.ON)
-          {
               r.collect.setPower(collect_power);
-          }
 
           if(!previousGamepad2.square && currentGamepad2.square)
           {
@@ -187,27 +187,29 @@ public class OpMode extends LinearOpMode {
               }
               else
               {
-                  collectAngle.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
+                  collectAngle.CS = collectAngle_Controller.collectAngleStatus.GROUND;
               }
           }
 
-          if(r.left_pixel.getState() == TRUE && lift.CS == lift_Controller.liftStatus.DOWN)
+
+            if(lift.CS == lift_Controller.liftStatus.DOWN) {
+
+                if (r.left_pixel.getState() == FALSE && leftLatch.CS == leftLatch_Controller.leftLatchStatus.OPEN) {
+                        leftLatch.CS = leftLatch_Controller.leftLatchStatus.CLOSE;
+                }
+                if(r.right_pixel.getState() == FALSE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.OPEN)
+                {
+                    rightLatch.CS = rightLatch_Controller.rightLatchStatus.CLOSE;
+                }
+            }
+
+          if(lift.CS == lift_Controller.liftStatus.DOWN && leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE && outtake.CS != outtake_Controller.outtakeStatus.INTER && r.right_pixel.getState() == FALSE && r.left_pixel.getState() == FALSE )
           {
-              leftLatch.CS = leftLatch_Controller.leftLatchStatus.CLOSE;
-          } else if (r.left_pixel.getState() == FALSE)
-          {
-              leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
+              outtake.CS = outtake_Controller.outtakeStatus.INTER;
           }
 
-          if(r.right_pixel.getState() == TRUE && lift.CS == lift_Controller.liftStatus.DOWN)
-          {
-              rightLatch.CS = rightLatch_Controller.rightLatchStatus.CLOSE;
-          } else if (r.right_pixel.getState() == FALSE)
-          {
-              rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
-          }
 
-          if(r.left_pixel.getState() == TRUE && r.right_pixel.getState() == TRUE && collect_power > 0)
+          if(r.left_pixel.getState() == FALSE && r.right_pixel.getState() == FALSE && collect_power > 0)
           {
               gamepad1.rumble(100);
               gamepad2.rumble(100);
@@ -222,6 +224,7 @@ public class OpMode extends LinearOpMode {
               }
               else
               {
+                  storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
                   outtake.CS = outtake_Controller.outtakeStatus.SCORE;
               }
           }
@@ -309,27 +312,39 @@ public class OpMode extends LinearOpMode {
                     pto.CS = pto_Controller.ptoStatus.OFF;
             }
 
-            if(!previousGamepad2.dpad_left && currentGamepad2.dpad_left)
+            if(!previousGamepad1.dpad_up && currentGamepad1.dpad_up)
             {
-                drone.CS = drone_Controller.droneStatus.RELEASED;
+                collectAngle.stack_level = Math.min(4, collectAngle.stack_level+1);
             }
+
+            if(!previousGamepad1.dpad_down && currentGamepad1.dpad_down)
+            {
+                collectAngle.stack_level = Math.max(0, collectAngle.stack_level-1);
+            }
+
+//            if(!previousGamepad2.dpad_left && currentGamepad2.dpad_left)
+//            {
+//                drone.CS = drone_Controller.droneStatus.RELEASED;
+//            }
 
             double hang_power = gamepad1.right_trigger - gamepad1.left_trigger;
 
             if(pto.CS == pto_Controller.ptoStatus.ON)
             {
+                collectAngle.stack_level =3;
+                collectAngle.CS = collectAngle_Controller.collectAngleStatus.STACK;
                 r.collect.setPower(hang_power);
             }
 
             collectAngle.update(r);
-            drone.update(r);
+           // drone.update(r);
             fourBar.update(r);
             leftLatch.update(r);
             pto.update(r);
             rightLatch.update(r);
             storageAngle.update(r);
             storage.update(r);
-            lift.update(r, 0, voltage);
+            lift.update(r, position, voltage);
             outtake.update(fourBar, storage, storageAngle, lift);
 
             double loop = System.nanoTime();
@@ -337,6 +352,16 @@ public class OpMode extends LinearOpMode {
             telemetry.addData("hz ", 1000000000 / (loop - loopTime));
 
             loopTime = loop;
+            telemetry.addData( "lift status", lift.CS);
+            telemetry.addData("outtake", outtake.CS);
+            telemetry.addData("left_pixel", r.left_pixel.getState());
+            telemetry.addData("right_pixel", r.right_pixel.getState());
+            telemetry.addData("collecy angle", collectAngle.CS);
+                    telemetry.addData("stack lever", collectAngle.stack_level);
+                    telemetry.addData("stack" ,stack);
+            telemetry.addData("fourbar", fourBar.CS);
+
+
 //            telemetry.addData("x", poseEstimate.getX());
 //            telemetry.addData("y", poseEstimate.getY());
 //            telemetry.addData("heading", poseEstimate.getHeading());

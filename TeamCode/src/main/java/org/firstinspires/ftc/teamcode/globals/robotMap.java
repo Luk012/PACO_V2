@@ -17,10 +17,6 @@ import org.firstinspires.ftc.teamcode.system_controllers.fourBar_Controller;
 
 public class robotMap{
 
-    public CoolServo left,right;
-
-    fourBar_Controller fourbar = new fourBar_Controller();
-    public static double initial_position = fourBar_Controller.init;
 
     public DcMotor rightFront = null;
     public DcMotor rightBack = null;
@@ -30,7 +26,7 @@ public class robotMap{
     public DcMotor lift = null;
     public DcMotor collect = null;
 
-    public Servo left_fourbar = null;
+    public  Servo left_fourbar = null;
     public Servo right_fourbar = null;
 
     public Servo storage = null;
@@ -43,17 +39,15 @@ public class robotMap{
 
     public Servo pto = null;
 
-    public Servo drone = null;
+   // public Servo drone = null;
 
     public DigitalChannel left_pixel = null;
     public DigitalChannel right_pixel = null;
 
     public DistanceSensor back = null;
 
-    public IMU imu;
+    //public IMU imu;
 
-    public static boolean reversedLeftServo = false, reversedRightServo = true;
-    public static double profileMaxVelocity = 16, profileAcceleration = 8, profileDeceleration = 8;
 
     public robotMap(HardwareMap Init)
     {
@@ -79,21 +73,22 @@ public class robotMap{
 
         pto = Init.get(Servo.class, "pto");
 
-        drone = Init.get(Servo.class, "dorne");
+       // drone = Init.get(Servo.class, "drone");
 
         left_pixel = Init.get(DigitalChannel.class, "left_pixel");
         right_pixel = Init.get(DigitalChannel.class, "right_pixel");
 
         back = Init.get(DistanceSensor.class, "back");
 
-        imu = Init.get(IMU.class, "imu");
 
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
-        ));
-        imu.initialize(parameters);
+        //imu = Init.get(IMU.class, "imu");
 
-        imu.resetYaw();
+//        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+//                RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+//        ));
+//        imu.initialize(parameters);
+//
+//        imu.resetYaw();
 
 
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -126,14 +121,12 @@ public class robotMap{
 
        pto.setDirection(Servo.Direction.FORWARD);
 
-       drone.setDirection(Servo.Direction.FORWARD);
-
-        ((CRServoImplEx) left_fourbar).setPwmRange(new PwmControl.PwmRange(500, 2500, 5000));
-        ((CRServoImplEx) right_fourbar).setPwmRange(new PwmControl.PwmRange(500, 2500, 5000));
-
-
-        left = new CoolServo(left_fourbar, reversedLeftServo, profileMaxVelocity, profileAcceleration, profileDeceleration, 1);
-        right = new CoolServo(right_fourbar, reversedRightServo, profileMaxVelocity, profileAcceleration, profileDeceleration, 1);
+     //  drone.setDirection(Servo.Direction.FORWARD);
+//
+//        ((CRServoImplEx) left_fourbar).setPwmRange(new PwmControl.PwmRange(500, 2500, 5000));
+//        ((CRServoImplEx) right_fourbar).setPwmRange(new PwmControl.PwmRange(500, 2500, 5000));
+//
+//
 
 
     }

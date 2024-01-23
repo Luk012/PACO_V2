@@ -26,10 +26,10 @@ public class collectAngle_Controller {
     public static collectAngleStatus CS = INITIALIZE, PS = INITIALIZE;
 
     public static double init = 0;
-    public static double lifted = 1;
-    public static double ground = 0;
+    public static double lifted = 0.6;
+    public static double ground = 0.38;
 
-    public static double stack[] = {0, 0, 0, 0, 0};
+    public static double stack[] = {0.1, 0.2, 0.3, 0.38, 0.46};
 
     public int stack_level = 0;
 
