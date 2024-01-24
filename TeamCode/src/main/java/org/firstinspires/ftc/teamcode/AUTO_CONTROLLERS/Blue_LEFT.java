@@ -166,7 +166,7 @@ public class Blue_LEFT {
                 {
                     storage.CS = storage_Controller.storageStatus.IK;
                 }
-                if(scorev2.seconds() > 0.8)
+                if(scorev2.seconds() > 0.65)
                 {
                     CurrentStatus = autoControllerStatus.SCORE_DONE;
                 }

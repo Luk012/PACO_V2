@@ -23,7 +23,7 @@ public class InverseKinematics {
     public static double distance_offset = -40;
 
     public static double fourbar_offset = 0;
-    public static double angle_offset = 0.45;
+    public static double angle_offset = 0.55;
 
 
 

@@ -26,10 +26,10 @@ public class storage_Controller {
 
     public static storageStatus CS = storageStatus.INITIALZIE, PS = storageStatus.INITIALZIE;
 
-    public static double init = 0.18;
-    public static double inter = 0.01;
-    public static double collect = 0.18;
-    public static double score = 0.45;
+    public static double init = 0.25;
+    public static double inter = 0.18;
+    public static double collect = 0.25;
+    public static double score = 0.535;
     public static double inverse_kinematics = 0.15;
 
     public void update(robotMap r)
