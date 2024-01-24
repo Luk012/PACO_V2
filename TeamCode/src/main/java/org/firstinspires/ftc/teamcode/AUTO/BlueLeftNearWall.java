@@ -55,12 +55,12 @@ public class BlueLeftNearWall extends LinearOpMode {
     }
 
     public static double x_start = 16, y_start = 62, angle_start = 270;
-    public static double x_purple_left = 23, y_purple_left = 36, angle_purple_left = 270;
-    public static double x_yellow_left = 47, y_yellow_left = 36, angle_yellow_left = 180;
-    public static double x_yellow_right = 46, y_yellow_right = 29, angle_yellow_right = 180;
-    public static double x_stack = -60.5, y_stack = 33, angle_stack = 180;
+    public static double x_purple_left = 27, y_purple_left = 36, angle_purple_left = 270;
+    public static double x_yellow_left = 47, y_yellow_left = 38.5, angle_yellow_left = 180;
+    public static double x_yellow_right = 50, y_yellow_right = 29, angle_yellow_right = 180;
+    public static double x_stack = -57.5, y_stack = 30, angle_stack = 180;
     public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 59, angle_prepare = 180;
-    public static double x_lung_de_linie = -36.5, y_lung_de_linie = 59, angle_lung_de_linie = 180;
+    public static double x_lung_de_linie = -26, y_lung_de_linie = 59, angle_lung_de_linie = 180;
     public static double x_park_from_right = 48, y_park_from_right = 62, angle_park_from_right = 180;
 
     @Override
@@ -133,19 +133,19 @@ public class BlueLeftNearWall extends LinearOpMode {
         TrajectorySequence GO_STACK = drive.trajectorySequenceBuilder(yellow_left)
                 .lineToLinearHeading(prepare_for_stack)
                 .lineToLinearHeading(lung_de_linie)
-                .lineToLinearHeading(stack)
+                .splineToLinearHeading(stack,Math.toRadians(180))
                 .build();
 
         TrajectorySequence GO_STACK_2 = drive.trajectorySequenceBuilder(yellow_right)
                 .lineToLinearHeading(prepare_for_stack)
                 .lineToLinearHeading(lung_de_linie)
-                .lineToLinearHeading(stack)
+                .splineToLinearHeading(stack,Math.toRadians(180))
                 .build();
 
         TrajectorySequence SCORE_LEFT = drive.trajectorySequenceBuilder(stack)
                 .lineToLinearHeading(lung_de_linie)
-                .lineToLinearHeading(prepare_for_stack)
-                .lineToLinearHeading(yellow_right)
+                .splineToLinearHeading(prepare_for_stack, Math.toRadians(180))
+                .splineToLinearHeading(yellow_right, Math.toRadians(180))
                 .build();
 
         TrajectorySequence PARK_FROM_RIGHT = drive.trajectorySequenceBuilder(yellow_right)
@@ -157,6 +157,9 @@ public class BlueLeftNearWall extends LinearOpMode {
 
         ElapsedTime collect = new ElapsedTime();
         ElapsedTime score = new ElapsedTime();
+        ElapsedTime preload = new ElapsedTime();
+        ElapsedTime preload2 = new ElapsedTime();
+        ElapsedTime collect2= new ElapsedTime();
 
         double nrcicluri = 0;
         collectAngle.stack_level = 3;
@@ -179,14 +182,16 @@ public class BlueLeftNearWall extends LinearOpMode {
 
                 case START: {
                     drive.followTrajectorySequenceAsync(PURPLE_LEFT);
+                    preload.reset();
                     status = STROBOT.PURPLE_DROP;
                     break;
                 }
 
                 case PURPLE_DROP: {
-                    if (!drive.isBusy()) {
+                    if (!drive.isBusy() || preload.seconds() > 0.65) {
                         collectAngle_Controller.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
                         drive.followTrajectorySequenceAsync(YELLOW_LEFT);
+                        preload2.reset();;
                         status = STROBOT.YELLOW;
                     }
                     break;
@@ -194,7 +199,7 @@ public class BlueLeftNearWall extends LinearOpMode {
 
 
                 case YELLOW: {
-                    if (!drive.isBusy()) {
+                    if (!drive.isBusy() || preload2.seconds() > 0.85) {
                         blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.SCORE_PRELOAD;
                         status = STROBOT.YELLOW_DROP;
                     }
@@ -243,6 +248,7 @@ public class BlueLeftNearWall extends LinearOpMode {
                      if(collect.seconds() > 0.9)
                      {
                          blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.COLLECT;
+                         collect2.reset();
                          status = STROBOT.COLLECT;
                      }
                      break;
@@ -254,9 +260,10 @@ public class BlueLeftNearWall extends LinearOpMode {
 
                         collectAngle.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
                     }
-                    if (!drive.isBusy()) {
+                    if (!drive.isBusy() || collect2.seconds() > 4.5) {
                                  r.collect.setPower(1);
                                  collectAngle.CS = collectAngle_Controller.collectAngleStatus.STACK;
+                                 collect.reset();
                                  status = STROBOT.VERIF;
                     }
                     break;
@@ -274,7 +281,7 @@ public class BlueLeftNearWall extends LinearOpMode {
                         rightLatch.CS = rightLatch_Controller.rightLatchStatus.CLOSE;
                     }
 
-                    if(leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE)
+                    if(leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE || collect.seconds() > 2)
                     {
                       //  outtake.CS = outtake_Controller.outtakeStatus.INTER;
                         status = STROBOT.GO_SCORE;
@@ -286,13 +293,14 @@ public class BlueLeftNearWall extends LinearOpMode {
                 {
                     r.collect.setPower(-1);
                     drive.followTrajectorySequenceAsync(SCORE_LEFT);
+                    score.reset();
                     status = STROBOT.PREPARE_FOR_SCORE;
                     break;
                 }
 
                 case PREPARE_FOR_SCORE:
                 {
-                    if(!drive.isBusy())
+                    if(!drive.isBusy() || score.seconds() > 6.6)
 
                     { r.collect.setPower(0);
                         blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.SCORE;
@@ -319,7 +327,7 @@ public class BlueLeftNearWall extends LinearOpMode {
                         collectAngle.stack_level -= nrcicluri*2;
                         outtake.CS = outtake_Controller.outtakeStatus.INITIALIZE;
                         score.reset();
-                        status = STROBOT.MICHI_MAUS;
+                        status = STROBOT.GO_TO_STACK;
                     } else
                     {
                         collect.reset();
