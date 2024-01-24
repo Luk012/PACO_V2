@@ -24,7 +24,7 @@ public class leftLatch_Controller {
 
     public static leftLatchStatus CS = leftLatchStatus.INITIALIZE, PS = leftLatchStatus.INITIALIZE;
 
-    public static double init = 0.215;
+    public static double init = 0.665;
     public static double open = 0.215;
     public static double close = 0.665;
 

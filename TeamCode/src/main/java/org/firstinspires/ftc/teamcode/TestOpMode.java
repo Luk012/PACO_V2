@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.firstinspires.ftc.teamcode.globals.InverseKinematics;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 import org.firstinspires.ftc.teamcode.system_controllers.collectAngle_Controller;
 //import org.firstinspires.ftc.teamcode.system_controllers.drone_Controller;
@@ -37,15 +38,15 @@ public class TestOpMode extends LinearOpMode {
 
         collectAngle_Controller collectAngle = new collectAngle_Controller();
        // drone_Controller drone = new drone_Controller();
-      // fourBar_Controller fourBar = new fourBar_Controller(r);
+      fourBar_Controller fourBar = new fourBar_Controller(r);
        // leftLatch_Controller leftLatch = new leftLatch_Controller();
        //pto_Controller pto = new pto_Controller();
       //  rightLatch_Controller rightLatch = new rightLatch_Controller();
-       // storage_Controller storage = new storage_Controller();
+        storage_Controller storage = new storage_Controller();
       //  storageAngle_Controller storageAngle = new storageAngle_Controller();
-       // lift_Controller lift = new lift_Controller();
+       lift_Controller lift = new lift_Controller();
        // outtake_Controller outtake = new outtake_Controller();
-
+        InverseKinematics ik = new InverseKinematics(r.right_fourbar, r.left_fourbar, r.storage,r.back);
 //lift.CS = lift_Controller.liftStatus.DOWN;
 
         double voltage;
@@ -58,13 +59,13 @@ public class TestOpMode extends LinearOpMode {
 
        collectAngle.update(r);
        //drone.update(r);
-      // fourBar.update(r);
+       fourBar.update(r);
       // leftLatch.update(r);
         //pto.update(r);
        //rightLatch.update(r);
        // storageAngle.update(r);
-       // storage.update(r);
-      // lift.update(r, 0, voltage);
+       storage.update(r);
+       lift.update(r, 0, voltage);
        // outtake.update( fourBar, storage, storageAngle, lift);
 
 
@@ -97,6 +98,8 @@ public class TestOpMode extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
 
+            int position = r.lift.getCurrentPosition();
+
 
 
             previousGamepad1.copy(currentGamepad1);
@@ -111,12 +114,14 @@ public class TestOpMode extends LinearOpMode {
 
             if(!previousGamepad2.cross && currentGamepad2.cross)
             {
-                    if(collectAngle.CS != collectAngle_Controller.collectAngleStatus.LIFTED)
-                    {
-                        collectAngle.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
-                    } else
-                        collectAngle.CS = collectAngle_Controller.collectAngleStatus.GROUND;
+                    stack = !stack;
             }
+
+
+                storage.CS = storage_Controller.storageStatus.IK;
+                fourBar.CS = fourBar_Controller.fourbarStatus.IK;
+                ik.updateServoPositions();
+
 
 //            if(!previousGamepad2.circle && currentGamepad2.circle){
 //                if(rightLatch.CS != rightLatch_Controller.rightLatchStatus.OPEN)
@@ -130,13 +135,14 @@ public class TestOpMode extends LinearOpMode {
 
            collectAngle.update(r);
             //drone.update(r);
-           //fourBar.update(r);
+           fourBar.update(r);
           // leftLatch.update(r);
           // pto.update(r);
            // rightLatch.update(r);
-           // storageAngle.update(r);
-          // storage.update(r);
-          // lift.update(r, LiftPosition, voltage);
+           //storageAngle.update(r);
+          storage.update(r);
+           lift.update(r, position, voltage);
+          // ik.updateServoPositions();
             //outtake.update(fourBar, storage, storageAngle, lift);
 
             double loop = System.nanoTime();

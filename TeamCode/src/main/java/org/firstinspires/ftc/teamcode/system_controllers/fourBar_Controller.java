@@ -22,6 +22,7 @@ public class fourBar_Controller {
         SCORE,
         COLLECT,
         INTER,
+        IK,
     }
 
     public fourBar_Controller(robotMap r){
@@ -38,11 +39,18 @@ public class fourBar_Controller {
     public static double inter = 0.79;
     public static double up = 0.19;
     public static double collect = 0.865;
+    public static double inverse_kinematics = 0.15;
 
     public void update(robotMap r)
     {
         left.update();
         right.update();
+
+        if(CS == fourbarStatus.IK)
+        {
+            right.setPosition(inverse_kinematics);
+            left.setPosition(inverse_kinematics);
+        }
 
         if(CS != PS || CS == INITIALIZE)
         {
@@ -74,6 +82,13 @@ public class fourBar_Controller {
                 {
                     right.setPosition(collect);
                     left.setPosition(collect);
+                    break;
+                }
+
+                case IK:
+                {
+                    right.setPosition(inverse_kinematics);
+                    left.setPosition(inverse_kinematics);
                     break;
                 }
             }

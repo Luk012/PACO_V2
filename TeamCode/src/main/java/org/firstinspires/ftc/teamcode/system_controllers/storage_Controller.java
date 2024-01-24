@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.system_controllers;
 
+import android.support.v4.app.INotificationSideChannel;
+
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.globals.robotMap;
@@ -13,6 +15,7 @@ public class storage_Controller {
         COLLECT,
         SCORE,
         INTER,
+        IK,
     }
 
     public storage_Controller()
@@ -23,13 +26,19 @@ public class storage_Controller {
 
     public static storageStatus CS = storageStatus.INITIALZIE, PS = storageStatus.INITIALZIE;
 
-    public static double init = 0.048;
+    public static double init = 0.18;
     public static double inter = 0.01;
-    public static double collect = 0.048;
-    public static double score = 0.33;
+    public static double collect = 0.18;
+    public static double score = 0.45;
+    public static double inverse_kinematics = 0.15;
 
     public void update(robotMap r)
     {
+        if(CS == storageStatus.IK)
+        {
+            r.storage.setPosition(inverse_kinematics);
+        }
+
         if(PS != CS || CS == storageStatus.INITIALZIE)
         {
             switch (CS)
@@ -54,6 +63,11 @@ public class storage_Controller {
                 case COLLECT:
                 {
                     r.storage.setPosition(collect);
+                    break;
+                }
+                case IK:
+                {
+                    r.storage.setPosition(inverse_kinematics);
                     break;
                 }
             }

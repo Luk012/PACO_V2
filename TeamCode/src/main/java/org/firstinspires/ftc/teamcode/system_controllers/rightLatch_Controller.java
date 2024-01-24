@@ -29,7 +29,7 @@ public class rightLatch_Controller{
 
     public static rightLatchStatus CS = rightLatchStatus.INITIALIZE, PS = rightLatchStatus.INITIALIZE;
 
-    public static double init = 0.55;
+    public static double init = 0.07;
     public static double open = 0.55;
     public static double close = 0.07;
 

@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.system_controllers.fourBar_Controller;
+import org.firstinspires.ftc.teamcode.system_controllers.storage_Controller;
 
 @Config
 public class InverseKinematics {
@@ -15,13 +17,13 @@ public class InverseKinematics {
     private DistanceSensor distanceSensor;
 
     // Constants for distance range and servo
-    public static double MAX_DISTANCE = 140;
-    public static double MIN_DISTANCE = 0;
-    public static double FOUR_BAR_LENGTH = 180;
-    public static double distance_offset = 0;
+    public static double MAX_DISTANCE = 200;
+    public static double MIN_DISTANCE = 10;
+    public static double FOUR_BAR_LENGTH = 235;
+    public static double distance_offset = -40;
 
-    public static double fourbar_offset = -0.05;
-    public static double angle_offset = 0.25;
+    public static double fourbar_offset = 0;
+    public static double angle_offset = 0.45;
 
 
 
@@ -42,8 +44,8 @@ public class InverseKinematics {
 
         if (targetAngles != null) {
 
-//            Four_BarController.inverse_kinematics = targetAngles[0];
-//            Storage_AngleController.inverse_kinematics = targetAngles[1];
+ fourBar_Controller.inverse_kinematics = targetAngles[0];
+ storage_Controller.inverse_kinematics = targetAngles[1];
         }
     }
 
