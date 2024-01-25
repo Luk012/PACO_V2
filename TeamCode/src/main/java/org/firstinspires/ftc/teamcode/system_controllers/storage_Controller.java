@@ -16,6 +16,7 @@ public class storage_Controller {
         SCORE,
         INTER,
         IK,
+        INTER_AUTO,
     }
 
     public storage_Controller()

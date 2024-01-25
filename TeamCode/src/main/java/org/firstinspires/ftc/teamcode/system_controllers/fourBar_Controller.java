@@ -23,6 +23,7 @@ public class fourBar_Controller {
         COLLECT,
         INTER,
         IK,
+        INTER_AUTO,
     }
 
     public fourBar_Controller(robotMap r){
@@ -40,6 +41,7 @@ public class fourBar_Controller {
     public static double up = 0.19;
     public static double collect = 0.865;
     public static double inverse_kinematics = 0.15;
+    public static double interauto = 0.5;
 
     public void update(robotMap r)
     {
@@ -91,6 +93,14 @@ public class fourBar_Controller {
                     left.setPosition(inverse_kinematics);
                     break;
                 }
+
+                case INTER_AUTO:
+                {
+                    right.setPosition(interauto);
+                    left.setPosition(interauto);
+                    break;
+                }
+
             }
         }
 

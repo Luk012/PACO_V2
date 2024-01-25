@@ -30,6 +30,7 @@ public class Blue_LEFT {
         SCORE_LIFT,
         SCORE_SYSTEMS,
         SCORE_DONE,
+        INTER,
 
     }
     public static autoControllerStatus CurrentStatus = autoControllerStatus.NOTHING, PreviousStatus = autoControllerStatus.NOTHING;
@@ -45,11 +46,19 @@ public class Blue_LEFT {
         switch (CurrentStatus)
         {
 
+            case INTER:
+            {
+                fourbar.CS = fourBar_Controller.fourbarStatus.INTER_AUTO;
+                storage.CS = storage_Controller.storageStatus.INTER;
+                CurrentStatus = autoControllerStatus.NOTHING;
+                break;
+            }
 
             case SCORE_PRELOAD:
             {
                 ik.updateServoPositions();
-                CurrentStatus = autoControllerStatus.INTER_SCORE_PRELAOD;
+                inter.reset();
+                CurrentStatus = autoControllerStatus.SCORE_PRELOAD_LIFT;
                 break;
 
             }
@@ -77,16 +86,16 @@ public class Blue_LEFT {
 
             case SCORE_PRELOAD_SYSTEMS:
             {
-                if(scorev2.seconds() > 0.2)
-                {
-                    fourbar.CS = fourBar_Controller.fourbarStatus.IK;
-
-                }
-                if(scorev2.seconds() > 0.4)
+                if(scorev2.seconds() > 0.15)
                 {
                     storage.CS = storage_Controller.storageStatus.IK;
+
                 }
-                if(scorev2.seconds() > 0.8)
+                if(scorev2.seconds() > 0.25)
+                {
+                    fourbar.CS = fourBar_Controller.fourbarStatus.IK;
+                }
+                if(scorev2.seconds() > 0.4)
                 {
                     CurrentStatus = autoControllerStatus.SCORE_PRELOAD_DONE;
                 }
@@ -131,7 +140,7 @@ public class Blue_LEFT {
             {
                 ik.updateServoPositions();
                 inter.reset();
-                CurrentStatus = autoControllerStatus.INTER_SCORE;
+                CurrentStatus = autoControllerStatus.SCORE_LIFT;
                 break;
             }
 
@@ -157,16 +166,16 @@ public class Blue_LEFT {
 
             case SCORE_SYSTEMS:
             {
-                if(scorev2.seconds() > 0.2)
-                {
-                    fourbar.CS = fourBar_Controller.fourbarStatus.IK;
-
-                }
-                if(scorev2.seconds() > 0.4)
+                if(scorev2.seconds() > 0.15)
                 {
                     storage.CS = storage_Controller.storageStatus.IK;
+
                 }
-                if(scorev2.seconds() > 0.65)
+                if(scorev2.seconds() > 0.25)
+                {
+                    fourbar.CS = fourBar_Controller.fourbarStatus.IK;
+                }
+                if(scorev2.seconds() > 0.4)
                 {
                     CurrentStatus = autoControllerStatus.SCORE_DONE;
                 }

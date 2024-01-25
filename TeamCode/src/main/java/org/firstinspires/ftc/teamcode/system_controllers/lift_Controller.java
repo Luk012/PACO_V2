@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.system_controllers;
 
+import static org.firstinspires.ftc.teamcode.system_controllers.lift_Controller.liftStatus.BASE;
+import static org.firstinspires.ftc.teamcode.system_controllers.lift_Controller.liftStatus.DOWN;
 import static org.firstinspires.ftc.teamcode.system_controllers.lift_Controller.liftStatus.INITIALIZE;
 import static org.firstinspires.ftc.teamcode.system_controllers.lift_Controller.liftStatus.UP;
 
@@ -13,6 +15,7 @@ public class lift_Controller {
         INITIALIZE,
         UP,
         DOWN,
+        BASE,
     }
 
     public double CurrentSpeed=0;
@@ -38,6 +41,7 @@ public class lift_Controller {
     int highest = 600;
 
     public static double up = 0;
+    public static double down = -10;
     public static int upCnt = 0;
     public static double MultiplicationIndex = 90;
 
@@ -76,10 +80,16 @@ public class lift_Controller {
 
         r.lift.setPower(powerLiftFinal);
 
-        if(CS != PS )
+        if(CS != PS || CS == BASE )
         {
             switch (CS)
             {
+                case BASE:
+                {
+                    LiftPIDUP.targetValue = base;
+                    break;
+                }
+
                 case INITIALIZE:
                 {
                         LiftPIDUP.targetValue = base;
@@ -94,7 +104,7 @@ public class lift_Controller {
 
                 case DOWN:
                 {
-                    LiftPIDDOWN.targetValue = base;
+                    LiftPIDDOWN.targetValue = down;
                     break;
                 }
             }

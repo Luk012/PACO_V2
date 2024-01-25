@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 import org.firstinspires.ftc.teamcode.system_controllers.collectAngle_Controller;
@@ -83,6 +84,7 @@ public class OpMode extends LinearOpMode {
         lift_Controller lift = new lift_Controller();
         outtake_Controller outtake = new outtake_Controller();
 
+        ElapsedTime scuipa = new ElapsedTime();
 
         double voltage;
         double loopTime = 0;
@@ -160,7 +162,10 @@ public class OpMode extends LinearOpMode {
 
             robotCentricDrive(r.leftFront, r.leftBack, r.rightFront, r.rightBack, SpeedLimit , StrafesOn , 0,0);
 
-          collect_power = gamepad2.right_trigger- gamepad2.left_trigger;
+                collect_power = gamepad2.right_trigger- gamepad2.left_trigger;
+
+
+          double collect_input = gamepad2.right_trigger - gamepad2.left_trigger;
 
               r.collect.setPower(collect_power);
 
@@ -187,7 +192,7 @@ public class OpMode extends LinearOpMode {
               }
               else
               {
-                  collectAngle.CS = collectAngle_Controller.collectAngleStatus.GROUND;
+                  collectAngle.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
               }
           }
 
@@ -205,11 +210,17 @@ public class OpMode extends LinearOpMode {
 
           if(lift.CS == lift_Controller.liftStatus.DOWN && leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE && outtake.CS != outtake_Controller.outtakeStatus.INTER && r.right_pixel.getState() == FALSE && r.left_pixel.getState() == FALSE )
           {
+              scuipa.reset();
               outtake.CS = outtake_Controller.outtakeStatus.INTER;
           }
 
+          if(scuipa.seconds() < 1)
+          {
+              r.collect.setPower(-1);
+          }
 
-          if(r.left_pixel.getState() == FALSE && r.right_pixel.getState() == FALSE && collect_power > 0)
+
+          if(r.left_pixel.getState() == FALSE && r.right_pixel.getState() == FALSE && collect_input > 0)
           {
               gamepad1.rumble(100);
               gamepad2.rumble(100);

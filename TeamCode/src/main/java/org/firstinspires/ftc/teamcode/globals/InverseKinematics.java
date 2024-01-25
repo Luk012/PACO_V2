@@ -20,7 +20,7 @@ public class InverseKinematics {
     public static double MAX_DISTANCE = 200;
     public static double MIN_DISTANCE = 10;
     public static double FOUR_BAR_LENGTH = 235;
-    public static double distance_offset = -40;
+    public static double distance_offset = -35;
 
     public static double fourbar_offset = 0;
     public static double angle_offset = 0.55;
