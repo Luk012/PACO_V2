@@ -39,7 +39,7 @@ public class robotMap{
 
     public Servo pto = null;
 
-   // public Servo drone = null;
+   public Servo drone = null;
 
     public DigitalChannel left_pixel = null;
     public DigitalChannel right_pixel = null;
@@ -73,7 +73,7 @@ public class robotMap{
 
         pto = Init.get(Servo.class, "pto");
 
-       // drone = Init.get(Servo.class, "drone");
+       drone = Init.get(Servo.class, "drone");
 
         left_pixel = Init.get(DigitalChannel.class, "left_pixel");
         right_pixel = Init.get(DigitalChannel.class, "right_pixel");
@@ -121,7 +121,7 @@ public class robotMap{
 
        pto.setDirection(Servo.Direction.FORWARD);
 
-     //  drone.setDirection(Servo.Direction.FORWARD);
+      drone.setDirection(Servo.Direction.FORWARD);
 //
 //        ((CRServoImplEx) left_fourbar).setPwmRange(new PwmControl.PwmRange(500, 2500, 5000));
 //        ((CRServoImplEx) right_fourbar).setPwmRange(new PwmControl.PwmRange(500, 2500, 5000));

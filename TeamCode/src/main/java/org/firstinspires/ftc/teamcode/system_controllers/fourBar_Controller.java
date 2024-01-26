@@ -13,7 +13,7 @@ public class fourBar_Controller {
     public final CoolServo left,right;
 
     public static boolean reversedLeftServo = false, reversedRightServo = true;
-    public static double profileMaxVelocity = 16, profileAcceleration = 8, profileDeceleration = 8;
+    public static double profileMaxVelocity = 16, profileAcceleration = 8, profileDeceleration = 10;
 
 
     public enum fourbarStatus
@@ -24,6 +24,8 @@ public class fourBar_Controller {
         INTER,
         IK,
         INTER_AUTO,
+        PRELOAD_AUTO,
+        FOR_LATCHES,
     }
 
     public fourBar_Controller(robotMap r){
@@ -42,6 +44,7 @@ public class fourBar_Controller {
     public static double collect = 0.865;
     public static double inverse_kinematics = 0.15;
     public static double interauto = 0.5;
+    public static double score_preload_auto = 0.045;
 
     public void update(robotMap r)
     {
@@ -98,6 +101,13 @@ public class fourBar_Controller {
                 {
                     right.setPosition(interauto);
                     left.setPosition(interauto);
+                    break;
+                }
+
+                case PRELOAD_AUTO:
+                {
+                    right.setPosition(score_preload_auto);
+                    left.setPosition(score_preload_auto);
                     break;
                 }
 

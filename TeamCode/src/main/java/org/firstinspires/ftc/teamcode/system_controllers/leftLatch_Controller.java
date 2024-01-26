@@ -57,12 +57,12 @@ public class leftLatch_Controller {
 
                 case CLOSE_2:
                 {
-                    if(latch.seconds() > 0.75)
+                    if(latch.seconds() > 0.95)
                     {
                         r.left_latch.setPosition(close);
 
                     }
-                    if (latch.seconds() > 0.95)
+                    if (latch.seconds() > 1.15)
                     {
                         CS = leftLatchStatus.CLOSE_DONE;
                     }

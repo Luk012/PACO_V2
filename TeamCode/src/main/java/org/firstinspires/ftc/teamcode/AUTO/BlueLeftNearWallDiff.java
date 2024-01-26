@@ -121,7 +121,7 @@ public class BlueLeftNearWallDiff extends LinearOpMode {
         rightLatch.update(r);
         storage.update(r);
         storageAngle.update(r);
-        outtake.update(fourbar, storage, storageAngle, lift);
+        outtake.update( fourbar, storage, storageAngle, lift, rightLatch,leftLatch);
         blue_left.update(r, lift, ik, fourbar, storage, storageAngle);
         pto.update(r);
 
@@ -132,8 +132,8 @@ public class BlueLeftNearWallDiff extends LinearOpMode {
         Pose2d yellow_left = new Pose2d(x_yellow_left, y_yellow_left, Math.toRadians(angle_yellow_left));
         Pose2d stack = new Pose2d(x_stack, y_stack- 5, Math.toRadians(angle_stack));
 
-        Pose2d prepare_for_stack = new Pose2d(x_prepare_for_stack, y_prepare_for_stack-7.5, Math.toRadians(angle_prepare));
-        Pose2d lung_de_linie = new Pose2d(x_lung_de_linie - 4, y_lung_de_linie-7.5, Math.toRadians(angle_lung_de_linie));
+        Pose2d prepare_for_stack = new Pose2d(x_prepare_for_stack, y_prepare_for_stack-5.5, Math.toRadians(angle_prepare));
+        Pose2d lung_de_linie = new Pose2d(x_lung_de_linie - 4, y_lung_de_linie-5.5, Math.toRadians(angle_lung_de_linie));
 
         Pose2d yellow_right = new Pose2d(x_yellow_right, y_yellow_right, Math.toRadians(angle_yellow_right));
         Pose2d park_from_right = new Pose2d(x_park_from_right, y_park_from_right, Math.toRadians(angle_park_from_right));
@@ -522,7 +522,7 @@ public class BlueLeftNearWallDiff extends LinearOpMode {
             rightLatch.update(r);
             storage.update(r);
             storageAngle.update(r);
-            outtake.update(fourbar, storage, storageAngle, lift);
+            outtake.update( fourbar, storage, storageAngle, lift, rightLatch,leftLatch);
             blue_left.update(r, lift, ik, fourbar, storage, storageAngle);
             pto.update(r);
             drive.update();

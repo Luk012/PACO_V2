@@ -62,7 +62,7 @@ public class BlueLeftNearWall extends LinearOpMode {
     public static double x_yellow_left = 47, y_yellow_left = 38.5, angle_yellow_left = 180;
     public static double x_yellow_center = 47, y_yellow_center = 36, angle_yellow_center = 180;
     public static double x_yellow_right = 50, y_yellow_right = 29, angle_yellow_right = 180;
-    public static double x_stack = -61.5, y_stack = 35, angle_stack = 180;
+    public static double x_stack = -61.5, y_stack = 36.5, angle_stack = 180;
     public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 59, angle_prepare = 180;
     public static double x_lung_de_linie = -25, y_lung_de_linie = 59, angle_lung_de_linie = 180;
     public static double x_park_from_right = 48, y_park_from_right = 62, angle_park_from_right = 180;
@@ -118,7 +118,7 @@ public class BlueLeftNearWall extends LinearOpMode {
         rightLatch.update(r);
         storage.update(r);
         storageAngle.update(r);
-        outtake.update(fourbar, storage, storageAngle, lift);
+        outtake.update( fourbar, storage, storageAngle, lift, rightLatch,leftLatch);
         blue_left.update(r, lift, ik, fourbar, storage, storageAngle);
         pto.update(r);
 
@@ -494,7 +494,7 @@ public class BlueLeftNearWall extends LinearOpMode {
             rightLatch.update(r);
             storage.update(r);
             storageAngle.update(r);
-            outtake.update(fourbar, storage, storageAngle, lift);
+            outtake.update( fourbar, storage, storageAngle, lift, rightLatch,leftLatch);
             blue_left.update(r, lift, ik, fourbar, storage, storageAngle);
             pto.update(r);
             drive.update();

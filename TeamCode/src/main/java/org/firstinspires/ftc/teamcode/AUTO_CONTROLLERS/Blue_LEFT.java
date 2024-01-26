@@ -32,6 +32,13 @@ public class Blue_LEFT {
         SCORE_DONE,
         INTER,
 
+        PRELOAD_GROUND,
+        PRELOAD_GROUND_2,
+        PRELOAD_GROUND_3,
+       PRELOADGROUNDDONE,
+        SCORE_LIFT_2,
+        SCORE_2,
+
     }
     public static autoControllerStatus CurrentStatus = autoControllerStatus.NOTHING, PreviousStatus = autoControllerStatus.NOTHING;
 
@@ -95,7 +102,7 @@ public class Blue_LEFT {
                 {
                     fourbar.CS = fourBar_Controller.fourbarStatus.IK;
                 }
-                if(scorev2.seconds() > 0.4)
+                if(scorev2.seconds() > 0.44)
                 {
                     CurrentStatus = autoControllerStatus.SCORE_PRELOAD_DONE;
                 }
@@ -122,6 +129,43 @@ public class Blue_LEFT {
                 break;
             }
 
+            case PRELOAD_GROUND:
+            {
+                fourbar.CS = fourBar_Controller.fourbarStatus.INTER;
+                storage.CS = storage_Controller.storageStatus.INTER;
+                timer.reset();
+                CurrentStatus =autoControllerStatus.PRELOAD_GROUND_2;
+                break;
+            }
+
+            case PRELOAD_GROUND_2:
+            {
+               if(timer.seconds() > 0.2)
+               {
+                   fourbar.CS = fourBar_Controller.fourbarStatus.PRELOAD_AUTO;
+               }
+
+               if(timer.seconds() > 0.6)
+               {
+                   storage.CS = storage_Controller.storageStatus.PRELOAD_AUTO;
+                   pruple_prelaod.reset();
+                   CurrentStatus = autoControllerStatus.PRELOAD_GROUND_3;
+               }
+
+                break;
+            }
+
+            case PRELOAD_GROUND_3:
+            {
+                if(pruple_prelaod.seconds() > 0.3)
+                {
+                    CurrentStatus = autoControllerStatus.PRELOADGROUNDDONE;
+                }
+                break;
+            }
+
+
+
     case COLLECT_SYSTEMS:
     {
         if(inter.seconds() > 0.35) {
@@ -141,6 +185,24 @@ public class Blue_LEFT {
                 ik.updateServoPositions();
                 inter.reset();
                 CurrentStatus = autoControllerStatus.SCORE_LIFT;
+                break;
+            }
+
+            case SCORE_2:{
+                ik.updateServoPositions();
+                inter.reset();
+                CurrentStatus = autoControllerStatus.SCORE_LIFT_2;
+                break;
+            }
+            case SCORE_LIFT_2:{
+                if(inter.seconds() > 0.1)
+                {
+//                    lift.pid =1;
+//                    lift.CurrentPosition = 0;
+//                    lift.CS = lift_Controller.liftStatus.UP;
+//                    scorev2.reset();
+                    CurrentStatus = autoControllerStatus.SCORE_SYSTEMS;
+                }
                 break;
             }
 

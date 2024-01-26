@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.system_controllers.storageAngle_Controller
 import org.firstinspires.ftc.teamcode.system_controllers.storage_Controller;
 
 
-@TeleOp(name="muie bravebotz", group="OpMode")
+@TeleOp(name="ik", group="OpMode")
 public class TestOpMode extends LinearOpMode {
 
 
@@ -48,6 +48,7 @@ public class TestOpMode extends LinearOpMode {
        // outtake_Controller outtake = new outtake_Controller();
         InverseKinematics ik = new InverseKinematics(r.right_fourbar, r.left_fourbar, r.storage,r.back);
 //lift.CS = lift_Controller.liftStatus.DOWN;
+
 
         double voltage;
         double loopTime = 0;
