@@ -16,6 +16,7 @@ public class lift_Controller {
         UP,
         DOWN,
         BASE,
+        DOWN_AUTO,
     }
 
     public double CurrentSpeed=0;
@@ -41,9 +42,10 @@ public class lift_Controller {
     int highest = 600;
 
     public static double up = 0;
-    public static double down = -10;
+    public static double down = -45;
     public static int upCnt = 0;
     public static double MultiplicationIndex = 90;
+    public static double downauto =0;
 
     public int CurrentPosition = 0;
 
@@ -105,6 +107,12 @@ public class lift_Controller {
                 case DOWN:
                 {
                     LiftPIDDOWN.targetValue = down;
+                    break;
+                }
+
+                case DOWN_AUTO:
+                {
+                    LiftPIDDOWN.targetValue = downauto;
                     break;
                 }
             }

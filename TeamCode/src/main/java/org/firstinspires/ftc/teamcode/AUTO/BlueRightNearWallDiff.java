@@ -65,12 +65,12 @@ public class BlueRightNearWallDiff extends LinearOpMode {
     public static double x_purple_left = -35, y_purple_left = 38, angle_purple_left = 180;
     public static double x_purple_center = -35.5, y_purple_center = 11, angle_purple_center = 270;
     public static double x_purple_right = -31.5, y_purple_right = 18, angle_purple_right = 270;
-    public static double x_yellow_left = 56.5, y_yellow_left = 42.5, angle_yellow_left = 180;
+    public static double x_yellow_left = 52.5, y_yellow_left = 39, angle_yellow_left = 180;
     public static double x_yellow_center = 47, y_yellow_center = 36, angle_yellow_center = 180;
     public static double x_yellow_right = 50, y_yellow_right = 30, angle_yellow_right = 180;
-    public static double x_stack = -52, y_stack = 8.6, angle_stack = 180;
-    public static double x_interstack = -5, y_inetrstack = 8.6 , angle_interstack = 180;
-    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 8.6, angle_prepare = 180;
+    public static double x_stack = -53, y_stack = 10, angle_stack = 180;
+    public static double x_interstack = -5, y_inetrstack = 10 , angle_interstack = 180;
+    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 10, angle_prepare = 180;
     public static double x_lung_de_linie = -25, y_lung_de_linie = 59, angle_lung_de_linie = 180;
     public static double x_park_from_right = 48, y_park_from_right = 62, angle_park_from_right = 180;
 
@@ -136,8 +136,8 @@ public class BlueRightNearWallDiff extends LinearOpMode {
         Pose2d purple_center = new Pose2d(x_purple_center, y_purple_center - 1.3, Math.toRadians(angle_purple_center));
         Pose2d purple_right = new Pose2d(x_purple_right -1, y_purple_right, Math.toRadians(angle_purple_right));
         Pose2d yellow_left = new Pose2d(x_yellow_left, y_yellow_left, Math.toRadians(angle_yellow_left));
-        Pose2d stack = new Pose2d(x_stack + 0.5, y_stack, Math.toRadians(angle_stack));
-        Pose2d stack2 = new Pose2d(x_stack+0.5, y_stack, Math.toRadians(angle_stack));
+        Pose2d stack = new Pose2d(x_stack, y_stack, Math.toRadians(angle_stack));
+        Pose2d stack2 = new Pose2d(x_stack, y_stack, Math.toRadians(angle_stack));
 
         Pose2d prepare_for_stack = new Pose2d(x_prepare_for_stack, y_prepare_for_stack, Math.toRadians(angle_prepare));
         Pose2d lung_de_linie = new Pose2d(x_lung_de_linie - 2, y_lung_de_linie-7.5, Math.toRadians(angle_lung_de_linie));
@@ -576,10 +576,7 @@ public class BlueRightNearWallDiff extends LinearOpMode {
                 {
                     if(collect.seconds() > 0.3)
                     {
-                        fourbar.CS= fourBar_Controller.fourbarStatus.INTER;
-                        storage.CS = storage_Controller.storageStatus.INTER;
-                        lift.pid =0 ;
-                        lift.CS = lift_Controller.liftStatus.DOWN;
+                       blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.COLLECT;
 
                     }
                     if(collect.seconds() > 0.65)

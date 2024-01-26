@@ -206,13 +206,13 @@ timer.reset();
 
             if(outtake.CS == outtake_Controller.outtakeStatus.COLLECTDONE || outtake.CS == outtake_Controller.outtakeStatus.INITIALIZE) {
 
-//                if (r.left_pixel.getState() == FALSE && leftLatch.CS == leftLatch_Controller.leftLatchStatus.OPEN) {
-//                        leftLatch.CS = leftLatch_Controller.leftLatchStatus.CLOSE;
-//                }
-//                if(r.right_pixel.getState() == FALSE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.OPEN)
-//                {
-//                    rightLatch.CS = rightLatch_Controller.rightLatchStatus.CLOSE;
-//                }
+                if (r.left_pixel.getState() == FALSE && leftLatch.CS == leftLatch_Controller.leftLatchStatus.OPEN) {
+                        leftLatch.CS = leftLatch_Controller.leftLatchStatus.CLOSE;
+                }
+                if(r.right_pixel.getState() == FALSE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.OPEN)
+                {
+                    rightLatch.CS = rightLatch_Controller.rightLatchStatus.CLOSE;
+                }
                 if(r.left_pixel.getState() == TRUE)
                 {
                     leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
@@ -222,13 +222,9 @@ timer.reset();
                     rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
                 }
 
-                if(r.left_pixel.getState() == FALSE && r.left_pixel.getState() == FALSE)
-                {
-                    outtake.CS = outtake_Controller.outtakeStatus.SECURE_LATCHES_FOR_2_PIXELS;
-                }
             }
 
-          if(lift.CS == lift_Controller.liftStatus.DOWN && leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE && outtake.CS != outtake_Controller.outtakeStatus.INTER)
+          if(lift.CS == lift_Controller.liftStatus.DOWN && leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE && outtake.CS != outtake_Controller.outtakeStatus.INTER && r.left_pixel.getState() == FALSE && r.right_pixel.getState() == FALSE)
           {
               scuipa.reset();
               outtake.CS = outtake_Controller.outtakeStatus.INTER;
@@ -253,15 +249,11 @@ timer.reset();
                   outtake.CS = outtake_Controller.outtakeStatus.COLLECT;
               }
               else
-              {if(leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE)
-              { storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
-                  outtake.CS = outtake_Controller.outtakeStatus.SCORE;}
-                  else
               {
-                      rightLatch.CS = rightLatch_Controller.rightLatchStatus.CLOSE;
-                      leftLatch.CS = leftLatch_Controller.leftLatchStatus.CLOSE;
+                  storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
+                  outtake.CS = outtake_Controller.outtakeStatus.SCORE;
               }
-              }
+
           }
 
             if(!previousGamepad2.dpad_up && currentGamepad2.dpad_up)

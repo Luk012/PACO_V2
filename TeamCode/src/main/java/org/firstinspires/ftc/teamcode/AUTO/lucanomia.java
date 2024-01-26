@@ -64,12 +64,12 @@ public class lucanomia extends LinearOpMode {
     public static double x_purple_left = 27, y_purple_left = 39, angle_purple_left = 270;
     public static double x_purple_center = 17, y_purple_center = 36, angle_purple_center = 270;
     public static double x_purple_right = 9, y_purple_right = 27.5, angle_purple_right = 180;
-    public static double x_yellow_left = 47, y_yellow_left = 38.5, angle_yellow_left = 180;
-    public static double x_yellow_center = 47, y_yellow_center = 36, angle_yellow_center = 180;
-    public static double x_yellow_right = 50, y_yellow_right = 32, angle_yellow_right = 180;
-    public static double x_stack = -59.5, y_stack = 8.8, angle_stack = 180;
-    public static double x_interstack = -5, y_inetrstack = 8.8 , angle_interstack = 180;
-    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 8.8, angle_prepare = 180;
+    public static double x_yellow_left = 48, y_yellow_left = 38.5, angle_yellow_left = 180;
+    public static double x_yellow_center = 48, y_yellow_center = 36, angle_yellow_center = 180;
+    public static double x_yellow_right = 48, y_yellow_right = 32, angle_yellow_right = 180;
+    public static double x_stack = -59.5, y_stack = 4.5, angle_stack = 180;
+    public static double x_interstack = -5, y_inetrstack = 4.5 , angle_interstack = 180;
+    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 4.5, angle_prepare = 180;
     public static double x_lung_de_linie = -25, y_lung_de_linie = 59, angle_lung_de_linie = 180;
     public static double x_park_from_right = 48, y_park_from_right = 62, angle_park_from_right = 180;
 
@@ -112,7 +112,7 @@ public class lucanomia extends LinearOpMode {
         fourbar.CS = fourBar_Controller.fourbarStatus.COLLECT;
         leftLatch.CS = leftLatch_Controller.leftLatchStatus.INITIALIZE;
         rightLatch.CS = rightLatch_Controller.rightLatchStatus.INITIALIZE;
-        lift.CS = lift_Controller.liftStatus.BASE;
+        lift.CS = lift_Controller.liftStatus.DOWN_AUTO;
         storage.CS = storage_Controller.storageStatus.COLLECT;
         storageAngle.CS = storageAngle_Controller.storageAngleStatus.INITIALIZE;
         pto.CS = pto_Controller.ptoStatus.OFF;
@@ -353,6 +353,16 @@ public class lucanomia extends LinearOpMode {
                 case YELLOW: {
                     if (!drive.isBusy() /*preload2.seconds() > 1.05*/) {
                         blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.SCORE_PRELOAD;
+                        if(blueLeftCase == "left"){
+                            storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
+                           storageAngle.rotation_i = 0;
+                        } else if(blueLeftCase == "center"){
+                            storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
+                           storageAngle.rotation_i = 2;
+                        } else {
+                            storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
+                           storageAngle.rotation_i = 4;
+                        }
                         status = STROBOT.YELLOW_DROP;
                     }
                     break;

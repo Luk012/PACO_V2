@@ -13,7 +13,7 @@ public class fourBar_Controller {
     public final CoolServo left,right;
 
     public static boolean reversedLeftServo = false, reversedRightServo = true;
-    public static double profileMaxVelocity = 16, profileAcceleration = 8, profileDeceleration = 10;
+    public static double profileMaxVelocity = 10, profileAcceleration = 3, profileDeceleration = 15;
 
 
     public enum fourbarStatus

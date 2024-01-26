@@ -58,15 +58,15 @@ public class RedRight extends LinearOpMode {
     }
 
     public static double x_start = 16, y_start = -62, angle_start = 90;
-    public static double x_purple_left = 27, y_purple_left = -36, angle_purple_left = 90;
+    public static double x_purple_left = 29, y_purple_left = -36, angle_purple_left = 90;
     public static double x_purple_center = 17, y_purple_center = -36, angle_purple_center = 90;
     public static double x_purple_right = 9, y_purple_right = -27.5, angle_purple_right = 180;
     public static double x_yellow_left = 48, y_yellow_left = -38.5, angle_yellow_left = 180;
     public static double x_yellow_center = 48, y_yellow_center = -36, angle_yellow_center = 180;
-    public static double x_yellow_right = 50, y_yellow_right = -32, angle_yellow_right = 180;
+    public static double x_yellow_right = 50, y_yellow_right = -30.5, angle_yellow_right = 180;
     public static double x_stack = -58.5, y_stack = -36, angle_stack = 180;
-    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = -59, angle_prepare = 180;
-    public static double x_lung_de_linie = -25, y_lung_de_linie = -59, angle_lung_de_linie = 180;
+    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = -60, angle_prepare = 180;
+    public static double x_lung_de_linie = -25, y_lung_de_linie = -60, angle_lung_de_linie = 180;
     public static double x_park_from_right = 48, y_park_from_right = -62, angle_park_from_right = 180;
 
     int caz = 0;
@@ -127,7 +127,7 @@ public class RedRight extends LinearOpMode {
         pto.update(r);
 
         Pose2d start_pose = new Pose2d(x_start, y_start,Math.toRadians(angle_start));
-        Pose2d purple_left = new Pose2d(x_purple_left-2, y_purple_left-1.2, Math.toRadians(angle_purple_left));
+        Pose2d purple_left = new Pose2d(x_purple_left, y_purple_left-1.2, Math.toRadians(angle_purple_left));
         Pose2d purple_center = new Pose2d(x_purple_center, y_purple_center+3, Math.toRadians(angle_purple_center));
         Pose2d purple_right = new Pose2d(x_purple_right -1, y_purple_right, Math.toRadians(angle_purple_right));
         Pose2d yellow_left = new Pose2d(x_yellow_left, y_yellow_left-3, Math.toRadians(angle_yellow_left));
@@ -322,6 +322,17 @@ public class RedRight extends LinearOpMode {
 
                 case YELLOW: {
                     if (!drive.isBusy() /*preload2.seconds() > 1.05*/) {
+                        if(redRightCase == "left"){
+                            storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
+                            storageAngle.rotation_i = 0;
+                        } else if(redRightCase == "center"){
+                            storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
+                            storageAngle.rotation_i = 2;
+                        } else {
+                            storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
+                            storageAngle.rotation_i = 4;
+                        }
+
                         blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.SCORE_PRELOAD;
                         status = STROBOT.YELLOW_DROP;
                     }

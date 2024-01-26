@@ -35,7 +35,7 @@ public class storage_Controller {
     public static double collect = 0.35;
     public static double score = 0.64;
     public static double inverse_kinematics = 0.15;
-    public static double score_auto_preload = 0.6;
+    public static double score_auto_preload = 0.65;
 
     public void update(robotMap r)
     {
