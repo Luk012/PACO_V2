@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controll
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.INTER2;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.INTER3;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.INTER4;
+import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.INTER_INTER;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.SCORE;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.SCORE2;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.SCOREDONE;
@@ -35,6 +36,7 @@ public class outtake_Controller {
         SECURE_LATCHES_FOR_2_PIXELS,
         SECURE_LATCHES_FOR_2_PIXELS2,
         SECURE_LATCHES_FOR_2_PIXELS_DONE,
+        INTER_INTER,
     }
 
     public outtake_Controller()
@@ -54,7 +56,7 @@ public class outtake_Controller {
     {
 
 
-            if(CS != PS || CS == INITIALIZE || CS == SCOREDONE || CS == COLLECTDONE || CS == SCORE || CS == SCORE2 || CS == COLLECT || CS == COLLECT2 || CS == INTER || CS == INTER2 || CS == INTER3 || CS == INTER4)
+            if(CS != PS || CS == INITIALIZE || CS == SCOREDONE || CS == COLLECTDONE || CS == SCORE || CS == SCORE2 || CS == COLLECT || CS == COLLECT2 || CS == INTER || CS == INTER2 || CS == INTER3 || CS == INTER4 || CS == INTER_INTER)
             {
                 switch (CS)
                 {
@@ -62,7 +64,17 @@ public class outtake_Controller {
                     case INTER:
                     {
                         fourbar.CS = fourBar_Controller.fourbarStatus.INTER;
-                        storage.CS = storage_Controller.storageStatus.INTER;
+                        latches.reset();
+                        CS = INTER_INTER;
+                        break;
+                    }
+
+                    case INTER_INTER:
+                    {
+                        if(latches.seconds() > 0.01)
+                        {
+                            storage.CS = storage_Controller.storageStatus.INTER;
+                        }
                         break;
                     }
 

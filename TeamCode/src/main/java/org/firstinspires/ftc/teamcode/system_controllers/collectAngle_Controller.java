@@ -27,7 +27,7 @@ public class collectAngle_Controller {
 
     public static double init = 0;
     public static double lifted = 0.6;
-    public static double ground = 0.38;
+    public static double ground = 0.1;
 
     public static double stack[] = {0.1, 0.2, 0.28, 0.35, 0.44};
 

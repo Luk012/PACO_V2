@@ -19,8 +19,8 @@ public class drone_Controller{
 
     public static droneStatus CS = droneStatus.INITIALIZE, PS = droneStatus.INITIALIZE;
 
-    public static double init = 0.55;
-    public static double released = 0.3 ;
+    public static double init = 0.45;
+    public static double released = 0.15 ;
 
     public void update(robotMap r)
     {

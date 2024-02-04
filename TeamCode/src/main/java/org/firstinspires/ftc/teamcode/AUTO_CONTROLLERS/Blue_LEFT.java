@@ -95,14 +95,14 @@ public class Blue_LEFT {
             {
                 if(scorev2.seconds() > 0.15)
                 {
-                    storage.CS = storage_Controller.storageStatus.IK;
+                    storage.CS = storage_Controller.storageStatus.SCORE;
 
                 }
                 if(scorev2.seconds() > 0.35)
                 {
-                    fourbar.CS = fourBar_Controller.fourbarStatus.IK;
+                    fourbar.CS = fourBar_Controller.fourbarStatus.SCORE;
                 }
-                if(scorev2.seconds() > 0.8)
+                if(scorev2.seconds() > 1)
                 {
                     CurrentStatus = autoControllerStatus.SCORE_PRELOAD_DONE;
                 }
@@ -121,11 +121,16 @@ public class Blue_LEFT {
 
             case INTER_COLLECT:
             {
+                if(scorev2.seconds() > 0.1)
+            {
+                fourbar.CS = fourBar_Controller.fourbarStatus.INTER;
+            }
                 if(scorev2.seconds() > 0.3)
-                { fourbar.CS = fourBar_Controller.fourbarStatus.INTER;
+                {
                 storage.CS = storage_Controller.storageStatus.INTER;
                 inter.reset();
                 CurrentStatus = autoControllerStatus.COLLECT_SYSTEMS;}
+
                 break;
             }
 
@@ -145,7 +150,7 @@ public class Blue_LEFT {
                    fourbar.CS = fourBar_Controller.fourbarStatus.PRELOAD_AUTO;
                }
 
-               if(timer.seconds() > 0.6)
+               if(timer.seconds() > 0.45)
                {
                    storage.CS = storage_Controller.storageStatus.PRELOAD_AUTO;
                    pruple_prelaod.reset();
@@ -230,14 +235,14 @@ public class Blue_LEFT {
             {
                 if(scorev2.seconds() > 0.15)
                 {
-                    storage.CS = storage_Controller.storageStatus.IK;
+                    storage.CS = storage_Controller.storageStatus.SCORE;
 
                 }
                 if(scorev2.seconds() > 0.35)
                 {
-                    fourbar.CS = fourBar_Controller.fourbarStatus.IK;
+                    fourbar.CS = fourBar_Controller.fourbarStatus.SCORE;
                 }
-                if(scorev2.seconds() > 0.8)
+                if(scorev2.seconds() > 1.5)
                 {
                     CurrentStatus = autoControllerStatus.SCORE_DONE;
                 }

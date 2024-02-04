@@ -33,9 +33,9 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import java.util.List;
 
 @Config
-@Autonomous(group = "Auto" , name = "lucanomia")
+@Autonomous(group = "Auto" , name = "bubuialablue")
 
-public class BlueLeftNearCenter extends LinearOpMode {
+public class BubuialaBlue extends LinearOpMode {
 
     enum STROBOT {
         START,
@@ -53,22 +53,64 @@ public class BlueLeftNearCenter extends LinearOpMode {
         PARK,
         PREPARE_COLLECT,
         GO_STACK_2,
-        SYSTEMS,
         NOTHING,
     }
 
     public static double x_start = 16, y_start = 62, angle_start = 270;
-    public static double x_purple_left = 27, y_purple_left = 39, angle_purple_left = 270;
-    public static double x_purple_center = 13.5, y_purple_center = 34, angle_purple_center = 270;
-    public static double x_purple_right = 9.5, y_purple_right = 27.5, angle_purple_right = 180;
+
+    public static double x_purple_left = 25, y_purple_left = 39, angle_purple_left = 270;
+    public static double x_purple_center = 13.5, y_purple_center = 32, angle_purple_center = 270;
+    public static double x_purple_right = 9, y_purple_right = 27.5, angle_purple_right = 180;
+
     public static double x_yellow_left = 46, y_yellow_left = 38.5, angle_yellow_left = 180;
     public static double x_yellow_center = 47, y_yellow_center = 38, angle_yellow_center = 180;
-    public static double x_yellow_right = 47, y_yellow_right = 32, angle_yellow_right = 180;
-    public static double x_stack = -59.5, y_stack = 5, angle_stack = 180;
-    public static double x_interstack = -5, y_inetrstack = 5 , angle_interstack = 180;
-    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 5, angle_prepare = 180;
-    public static double x_lung_de_linie = -25, y_lung_de_linie = 59, angle_lung_de_linie = 180;
-    public static double x_park_from_right = 48, y_park_from_right = 62, angle_park_from_right = 180;
+    public static double x_yellow_right = 45, y_yellow_right = 29.5, angle_yellow_right = 180;
+
+    public static double x_score_right_ciclu_1 = 45, y_score_right_ciclu1 = 38, angle_score_right_ciculu1 = 180;
+    public static double x_score_right_ciclu_2 = 45, y_score_right_ciclu2 = 38, angle_score_right_ciculu2 = 180;
+
+    public static double x_score_center_ciclu_1 = -5, y_score_center_ciclu1 = -4.5, angle_score_center_ciculu1 = 180;
+    public static double x_score_center_ciclu_2 = -5, y_score_center_ciclu2 = -4.5, angle_score_center_ciculu2 = 180;
+
+    public static double x_score_left_ciclu_1 = -5, y_score_left_ciclu1 = -4.5, angle_score_left_ciculu1 = 180;
+    public static double x_score_left_ciclu_2 = -5, y_score_left_ciclu2 = -4.5, angle_score_left_ciculu2 = 180;
+
+    public static double x_collect_right_ciclu_1 = -5, y_collect_right_ciclu1 = -4.5, angle_collect_right_ciculu1 = 180;
+    public static double x_collect_right_ciclu_2 = -5, y_collect_right_ciclu2 = -4.5, angle_collect_right_ciculu2 = 180;
+
+    public static double x_collect_center_ciclu_1 = -5, y_collect_center_ciclu1 = -4.5, angle_collect_center_ciculu1 = 180;
+    public static double x_collect_center_ciclu_2 = -5, y_collect_center_ciclu2 = -4.5, angle_collect_center_ciculu2 = 180;
+
+    public static double x_collect_left_ciclu_1 = -5, y_collect_left_ciclu1 = -4.5, angle_collect_left_ciculu1 = 180;
+    public static double x_collect_left_ciclu_2 = -5, y_collect_left_ciclu2 = -4.5, angle_collect_left_ciculu2 = 180;
+    
+    public static double x_inter_score_left_ciclu_1 = 2, y_inter_score_left_ciclu_1 = 4.5, angle_inter_score_left_ciclu_1 = 180;
+    public static double x_inter_score_left_ciclu_2 = 2, y_inter_score_left_ciclu_2 = 4.5, angle_inter_score_left_ciclu_2 = 180;
+
+    public static double x_inter_score_center_ciclu_1 = 2, y_inter_score_center_ciclu_1 = 4.5, angle_inter_score_center_ciclu_1 = 180;
+    public static double x_inter_score_center_ciclu_2 = 2, y_inter_score_center_ciclu_2 = 4.5, angle_inter_score_center_ciclu_2 = 180;
+
+    public static double x_inter_score_right_ciclu_1 = 2, y_inter_score_right_ciclu_1 = 4.5, angle_inter_score_right_ciclu_1 = 180;
+    public static double x_inter_score_right_ciclu_2 = 2, y_inter_score_right_ciclu_2 = 4.5, angle_inter_score_right_ciclu_2 = 180;
+
+    public static double x_inter_collect_left_ciclu_1 = 2, y_inter_collect_left_ciclu_1 = 4.5, angle_inter_collect_left_ciclu_1 = 180;
+    public static double x_inter_collect_left_ciclu_2 = 2, y_inter_collect_left_ciclu_2 = 4.5, angle_inter_collect_left_ciclu_2 = 180;
+
+    public static double x_inter_collect_center_ciclu_1 = 2, y_inter_collect_center_ciclu_1 = 4.5, angle_inter_collect_center_ciclu_1 = 180;
+    public static double x_inter_collect_center_ciclu_2 = 2, y_inter_collect_center_ciclu_2 = 4.5, angle_inter_collect_center_ciclu_2 = 180;
+
+    public static double x_inter_collect_right_ciclu_1 = 2, y_inter_collect_right_ciclu_1 = 4.5, angle_inter_collect_right_ciclu_1 = 180;
+    public static double x_inter_collect_right_ciclu_2 = 2, y_inter_collect_right_ciclu_2 = 4.5, angle_inter_collect_right_ciclu_2 = 180;
+
+
+    public static double x_slowed_left_ciclu_1 = -59.5, y_slowed_left_ciclu_1 = 4.5, angle_slowed_left_ciclu_1 = 180;
+    public static double x_slowed_left_ciclu_2 = -59.5, y_slowed_left_ciclu_2 = 4.5, angle_slowed_left_ciclu_2 = 180;
+
+    public static double x_slowed_center_ciclu_1 = -59.5, y_slowed_center_ciclu_1 = 4.5, angle_slowed_center_ciclu_1 = 180;
+    public static double x_slowed_center_ciclu_2 = -59.5, y_slowed_center_ciclu_2 = 4.5, angle_slowed_center_ciclu_2 = 180;
+
+    public static double x_slowed_right_ciclu_1 = -59.5, y_slowed_right_ciclu_1 = 4.5, angle_slowed_right_ciclu_1 = 180;
+    public static double x_slowed_right_ciclu_2 = -59.5, y_slowed_right_ciclu_2 = 4.5, angle_slowed_right_ciclu_2 = 180;
 
     int caz = 0;
     boolean ok  = FALSE;
@@ -128,34 +170,61 @@ public class BlueLeftNearCenter extends LinearOpMode {
         pto.update(r);
 
         Pose2d start_pose = new Pose2d(x_start, y_start,Math.toRadians(angle_start));
-        Pose2d purple_left = new Pose2d(x_purple_left-2, y_purple_left, Math.toRadians(angle_purple_left));
-        Pose2d purple_center = new Pose2d(x_purple_center, y_purple_center - 1, Math.toRadians(angle_purple_center));
-        Pose2d purple_right = new Pose2d(x_purple_right +1, y_purple_right, Math.toRadians(angle_purple_right));
-        Pose2d yellow_left = new Pose2d(x_yellow_left, y_yellow_left+0.5, Math.toRadians(angle_yellow_left));
+        
+        Pose2d purple_left = new Pose2d(x_purple_left, y_purple_left, Math.toRadians(angle_purple_left));
+        Pose2d purple_center = new Pose2d(x_purple_center, y_purple_center, Math.toRadians(angle_purple_center));
+        Pose2d purple_right = new Pose2d(x_purple_right, y_purple_right, Math.toRadians(angle_purple_right));
+        
+        Pose2d yellow_left = new Pose2d(x_yellow_left, y_yellow_left, Math.toRadians(angle_yellow_left));
+        Pose2d yellow_center = new Pose2d(x_yellow_center, y_yellow_center, Math.toRadians(angle_yellow_center));
+        Pose2d yellow_right = new Pose2d(x_yellow_right, y_yellow_right, Math.toRadians(angle_yellow_right));
 
-        Pose2d stack = new Pose2d(x_stack, y_stack, Math.toRadians(angle_stack));
+        Pose2d score_left_ciclu1 = new Pose2d(x_score_left_ciclu_1, y_score_left_ciclu1, Math.toRadians(angle_score_left_ciculu1));
+        Pose2d score_left_ciclu2 = new Pose2d(x_score_left_ciclu_2, y_score_left_ciclu2, Math.toRadians(angle_score_left_ciculu2));
+
+        Pose2d score_center_ciclu1 = new Pose2d(x_score_center_ciclu_1, y_score_center_ciclu1, Math.toRadians(angle_score_center_ciculu1));
+        Pose2d score_center_ciclu2 = new Pose2d(x_score_center_ciclu_2, y_score_center_ciclu2, Math.toRadians(angle_score_center_ciculu2));
+
+        Pose2d score_right_ciclu1 = new Pose2d(x_score_right_ciclu_1, y_score_right_ciclu1, Math.toRadians(angle_score_right_ciculu1));
+        Pose2d score_right_ciclu2 = new Pose2d(x_score_right_ciclu_2, y_score_right_ciclu2, Math.toRadians(angle_score_right_ciculu2));
+
+        Pose2d collect_left_ciclu1 = new Pose2d(x_collect_left_ciclu_1, y_collect_left_ciclu1, Math.toRadians(angle_collect_left_ciculu1));
+        Pose2d collect_left_ciclu2 = new Pose2d(x_collect_left_ciclu_2, y_collect_left_ciclu2, Math.toRadians(angle_collect_left_ciculu2));
+
+        Pose2d collect_center_ciclu1 = new Pose2d(x_collect_center_ciclu_1, y_collect_center_ciclu1, Math.toRadians(angle_collect_center_ciculu1));
+        Pose2d collect_center_ciclu2 = new Pose2d(x_collect_center_ciclu_2, y_collect_center_ciclu2, Math.toRadians(angle_collect_center_ciculu2));
+
+        Pose2d collect_right_ciclu1 = new Pose2d(x_collect_right_ciclu_1, y_collect_right_ciclu1, Math.toRadians(angle_collect_right_ciculu1));
+        Pose2d collect_right_ciclu2 = new Pose2d(x_collect_right_ciclu_2, y_collect_right_ciclu2, Math.toRadians(angle_collect_right_ciculu2));
+
+        Pose2d inter_score_right_ciclu1 = new Pose2d(x_inter_score_right_ciclu_1, y_inter_score_right_ciclu_1, Math.toRadians(angle_inter_score_right_ciclu_1));
+        Pose2d inter_score_right_ciclu2 = new Pose2d(x_inter_score_right_ciclu_2, y_inter_score_right_ciclu_2, Math.toRadians(angle_inter_score_right_ciclu_2));
+
+        Pose2d inter_score_left_ciclu1 = new Pose2d(x_inter_score_left_ciclu_1, y_inter_score_left_ciclu_1, Math.toRadians(angle_inter_score_left_ciclu_1));
+        Pose2d inter_score_left_ciclu2 = new Pose2d(x_inter_score_left_ciclu_2, y_inter_score_left_ciclu_2, Math.toRadians(angle_inter_score_left_ciclu_2));
+
+        Pose2d inter_score_center_ciclu1 = new Pose2d(x_inter_score_center_ciclu_1, y_inter_score_center_ciclu_1, Math.toRadians(angle_inter_score_center_ciclu_1));
+        Pose2d inter_score_center_ciclu2 = new Pose2d(x_inter_score_center_ciclu_2, y_inter_score_center_ciclu_2, Math.toRadians(angle_inter_score_center_ciclu_2));
 
 
-        Pose2d inter = new Pose2d(x_interstack, y_inetrstack, Math.toRadians(angle_interstack));
+        Pose2d inter_collect_right_ciclu1 = new Pose2d(x_inter_collect_right_ciclu_1, y_inter_collect_right_ciclu_1, Math.toRadians(angle_inter_collect_right_ciclu_1));
+        Pose2d inter_collect_right_ciclu2 = new Pose2d(x_inter_collect_right_ciclu_2, y_inter_collect_right_ciclu_2, Math.toRadians(angle_inter_collect_right_ciclu_2));
 
-        Pose2d prepare_for_stack = new Pose2d(x_prepare_for_stack, y_prepare_for_stack, Math.toRadians(angle_prepare));
-        Pose2d lung_de_linie = new Pose2d(x_lung_de_linie - 4, y_lung_de_linie-5.5, Math.toRadians(angle_lung_de_linie));
+        Pose2d inter_collect_left_ciclu1 = new Pose2d(x_inter_collect_left_ciclu_1, y_inter_collect_left_ciclu_1, Math.toRadians(angle_inter_collect_left_ciclu_1));
+        Pose2d inter_collect_left_ciclu2 = new Pose2d(x_inter_collect_left_ciclu_2, y_inter_collect_left_ciclu_2, Math.toRadians(angle_inter_collect_left_ciclu_2));
 
-        Pose2d yellow_right = new Pose2d(x_yellow_right -2, y_yellow_right -2.5, Math.toRadians(angle_yellow_right));
-        Pose2d yellow_right2 = new Pose2d(x_yellow_right-3.1, y_yellow_right , Math.toRadians(angle_yellow_right));
-        Pose2d yellow_right3 = new Pose2d(x_yellow_right-2.5, y_yellow_right+2.5, Math.toRadians(angle_yellow_right));
-        Pose2d yellow_right4 = new Pose2d(x_yellow_right -2, y_yellow_right +1, Math.toRadians(angle_yellow_right));
+        Pose2d inter_collect_center_ciclu1 = new Pose2d(x_inter_collect_center_ciclu_1, y_inter_collect_center_ciclu_1, Math.toRadians(angle_inter_collect_center_ciclu_1));
+        Pose2d inter_collect_center_ciclu2 = new Pose2d(x_inter_collect_center_ciclu_2, y_inter_collect_center_ciclu_2, Math.toRadians(angle_inter_collect_center_ciclu_2));
 
+        Pose2d slowed_left_ciclu1 = new Pose2d(x_slowed_left_ciclu_1, y_slowed_left_ciclu_1, Math.toRadians(angle_slowed_left_ciclu_1));
+        Pose2d slowed_left_ciclu2 = new Pose2d(x_slowed_left_ciclu_2, y_slowed_left_ciclu_2, Math.toRadians(angle_slowed_left_ciclu_2));
 
-        Pose2d park_from_right = new Pose2d(x_park_from_right, y_park_from_right, Math.toRadians(angle_park_from_right));
-        Pose2d yellow_center = new Pose2d(x_yellow_center, y_yellow_center-8, Math.toRadians(angle_yellow_center));
-        Pose2d park_from_left = new Pose2d(x_park_from_right, y_park_from_right, Math.toRadians(angle_park_from_right));
+        Pose2d slowed_center_ciclu1 = new Pose2d(x_slowed_center_ciclu_1, y_slowed_center_ciclu_1, Math.toRadians(angle_slowed_center_ciclu_1));
+        Pose2d slowed_center_ciclu2 = new Pose2d(x_slowed_center_ciclu_2, y_slowed_center_ciclu_2, Math.toRadians(angle_slowed_center_ciclu_2));
 
-        Pose2d prepare_for_stack_score = new Pose2d(x_prepare_for_stack - 25, y_prepare_for_stack, Math.toRadians(angle_prepare));
-        Pose2d lung_de_linie_score = new Pose2d(x_lung_de_linie-4, y_lung_de_linie+5.5, Math.toRadians(angle_lung_de_linie));
+        Pose2d slowed_right_ciclu1 = new Pose2d(x_slowed_right_ciclu_1, y_slowed_right_ciclu_1, Math.toRadians(angle_slowed_right_ciclu_1));
+        Pose2d slowed_right_ciclu2 = new Pose2d(x_slowed_right_ciclu_2, y_slowed_right_ciclu_2, Math.toRadians(angle_slowed_right_ciclu_2));
 
-        Pose2d lung_de_linie_2 = new Pose2d(x_lung_de_linie -4.5, y_lung_de_linie-2.5, Math.toRadians(angle_lung_de_linie));
-        Pose2d prepare_for_stack_2 = new Pose2d(x_prepare_for_stack, y_prepare_for_stack, Math.toRadians(angle_prepare));
 
         TrajectorySequence PURPLE_LEFT = drive.trajectorySequenceBuilder(start_pose)
                 .lineToLinearHeading(purple_left)
@@ -181,122 +250,102 @@ public class BlueLeftNearCenter extends LinearOpMode {
                 .lineToLinearHeading(yellow_right)
                 .build();
 
-        TrajectorySequence GO_STACK_LEFT = drive.trajectorySequenceBuilder(yellow_left)
-                .setTangent(90)
-                .splineToLinearHeading(prepare_for_stack, Math.toRadians(180))
-                .lineToLinearHeading(inter)
-                //.lineToLinearHeading(lung_de_linie)
+        TrajectorySequence COLLECT_LEFT_CICLU_1 = drive.trajectorySequenceBuilder(yellow_left)
+                .lineToLinearHeading(inter_collect_left_ciclu1)
+                .lineToLinearHeading(collect_left_ciclu1)
                 .lineToLinearHeading(
-
-                        stack,
+                slowed_left_ciclu1,
                         SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
 
                 )
-
-                //.lineToLinearHeading(stack)
-//                .lineToLinearHeading(stack)
-//                .lineToLinearHeading(prepare_for_stack)
-//                .lineToLinearHeading(lung_de_linie)
-//                .splineToLinearHeading(stack,Math.toRadians(180))
-//                .setTangent(Math.toRadians(0))
                 .build();
 
-        TrajectorySequence GO_STACK_CENTER = drive.trajectorySequenceBuilder(yellow_center)
-                .setTangent(90)
-                .splineToLinearHeading(prepare_for_stack, Math.toRadians(180))
-                .lineToLinearHeading(inter)
-                //.lineToLinearHeading(lung_ de_linie)
+        TrajectorySequence COLLECT_LEFT_CICLU_2 = drive.trajectorySequenceBuilder(score_left_ciclu1)
+                .lineToLinearHeading(inter_collect_left_ciclu2)
+                .lineToLinearHeading(collect_left_ciclu2)
                 .lineToLinearHeading(
-
-                        stack,
+                        slowed_left_ciclu2,
                         SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
 
                 )
-//                .lineToLinearHeading(prepare_for_stack)
-//                .lineToLinearHeading(lung_de_linie)
-//                .splineToLinearHeading(stack, Math.toRadians(180))
                 .build();
 
-        TrajectorySequence GO_STACK_CENTER_2 = drive.trajectorySequenceBuilder(yellow_right)
-                .setTangent(90)
-                .splineToLinearHeading(prepare_for_stack_2, Math.toRadians(180))
-                //.lineToLinearHeading(lung_de_linie_2)
-                .lineToLinearHeading(stack)
-//                .lineToLinearHeading(prepare_for_stack)
-//                .lineToLinearHeading(lung_de_linie)
-//                .splineToLinearHeading(stack, Math.toRadians(180))
-                .build();
-
-        TrajectorySequence GO_STACK_RIGHT = drive.trajectorySequenceBuilder(yellow_right)
-                .setTangent(90)
-                .splineToLinearHeading(prepare_for_stack, Math.toRadians(180))
-                .lineToLinearHeading(inter)
-                //.lineToLinearHeading(lung_de_linie)
+        TrajectorySequence COLLECT_CENTER_CICLU_1 = drive.trajectorySequenceBuilder(yellow_center)
+                .lineToLinearHeading(inter_collect_center_ciclu1)
+                .lineToLinearHeading(collect_center_ciclu1)
                 .lineToLinearHeading(
-
-                        stack,
+                        slowed_center_ciclu1,
                         SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
 
                 )
-//                .lineToLinearHeading(prepare_for_stack)
-//                .lineToLinearHeading(lung_de_linie)
-//                .splineToLinearHeading(stack,Math.toRadians(180))
                 .build();
 
-        TrajectorySequence SCORE_CENTER = drive.trajectorySequenceBuilder(stack)
+        TrajectorySequence COLLECT_CENTER_CICLU_2 = drive.trajectorySequenceBuilder(score_center_ciclu1)
+                .lineToLinearHeading(inter_collect_center_ciclu2)
+                .lineToLinearHeading(collect_center_ciclu2)
+                .lineToLinearHeading(
+                        slowed_center_ciclu2,
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
 
-//                .splineToLinearHeading(lung_de_linie,Math.toRadians(180))
-//                .lineToLinearHeading(prepare_for_stack)
-//                .lineToLinearHeading(yellow_right)
-//                .setTangent(Math.toRadians(0))
-                .setTangent(70)
-                //.splineToLinearHeading(lung_de_linie_score, Math.toRadians(0))
-                .lineToLinearHeading(prepare_for_stack_score)
-                .splineToLinearHeading(yellow_right2, Math.toRadians(0))
-                //.splineToLinearHeading(yellow_right, Math.toRadians(270))
-//                .lineToLinearHeading(lung_de_linie)
-//                .splineToLinearHeading(prepare_for_stack, Math.toRadians(180))
-//                .splineToLinearHeading(yellow_right, Math.toRadians(180))
-                //.setTangent(Math.toRadians(0))
+                )
                 .build();
 
-        TrajectorySequence SCORE_LEFT = drive.trajectorySequenceBuilder(stack)
+        TrajectorySequence COLLECT_RIGHT_CICLU_1 = drive.trajectorySequenceBuilder(yellow_right)
+                .lineToLinearHeading(inter_collect_right_ciclu1)
+                .lineToLinearHeading(collect_right_ciclu1)
+                .lineToLinearHeading(
+                        slowed_right_ciclu1,
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
 
-//                .splineToLinearHeading(lung_de_linie,Math.toRadians(180))
-//                .lineToLinearHeading(prepare_for_stack)
-//                .lineToLinearHeading(yellow_right)
-//                .setTangent(Math.toRadians(0))
-                .setTangent(70)
-                //.splineToLinearHeading(lung_de_linie_score, Math.toRadians(0))
-                .lineToLinearHeading(prepare_for_stack_score)
-                .splineToLinearHeading(yellow_right3, Math.toRadians(0))
-                //.splineToLinearHeading(yellow_right, Math.toRadians(270))
-//                .lineToLinearHeading(lung_de_linie)
-//                .splineToLinearHeading(prepare_for_stack, Math.toRadians(180))
-//                .splineToLinearHeading(yellow_right, Math.toRadians(180))
-                //.setTangent(Math.toRadians(0))
+                )
                 .build();
 
-        TrajectorySequence SCORE_RIGHT = drive.trajectorySequenceBuilder(stack)
-                .setTangent(70)
-               // .splineToLinearHeading(lung_de_linie_score, Math.toRadians(0))
-                .lineToLinearHeading(prepare_for_stack_score)
-                .splineToLinearHeading(yellow_right4, Math.toRadians(0))
-                //.splineToLinearHeading(yellow_right, Math.toRadians(270))
+        TrajectorySequence COLLECT_RIGHT_CICLU_2 = drive.trajectorySequenceBuilder(score_right_ciclu1)
+                .lineToLinearHeading(inter_collect_right_ciclu2)
+                .lineToLinearHeading(collect_right_ciclu2)
+                .lineToLinearHeading(
+                        slowed_right_ciclu2,
+                        SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL)
+
+                )
                 .build();
 
-        TrajectorySequence PARK_FROM_RIGHT = drive.trajectorySequenceBuilder(yellow_right)
-                .forward(4)
-                .lineToLinearHeading(park_from_right)
+        TrajectorySequence SCORE_CENTER_CICLU_1 = drive.trajectorySequenceBuilder(slowed_center_ciclu1)
+                .lineToLinearHeading(inter_score_center_ciclu1)
+                .splineToLinearHeading(score_center_ciclu1, Math.toRadians(0))
                 .build();
 
-        TrajectorySequence PARK_FROM_LEFT = drive.trajectorySequenceBuilder(yellow_left)
-                .forward(4)
-                .lineToLinearHeading(park_from_left)
+        TrajectorySequence SCORE_CENTER_CICLU_2 = drive.trajectorySequenceBuilder(slowed_center_ciclu2)
+                .lineToLinearHeading(inter_score_center_ciclu2)
+                .splineToLinearHeading(score_center_ciclu2, Math.toRadians(0))
                 .build();
+
+        TrajectorySequence SCORE_LEFT_CICLU_1 = drive.trajectorySequenceBuilder(slowed_left_ciclu1)
+                .lineToLinearHeading(inter_score_left_ciclu1)
+                .splineToLinearHeading(score_left_ciclu1, Math.toRadians(0))
+                .build();
+
+        TrajectorySequence SCORE_LEFT_CICLU_2 = drive.trajectorySequenceBuilder(slowed_left_ciclu2)
+                .lineToLinearHeading(inter_score_left_ciclu2)
+                .splineToLinearHeading(score_left_ciclu2, Math.toRadians(0))
+                .build();
+
+        TrajectorySequence SCORE_RIGHT_CICLU_1 = drive.trajectorySequenceBuilder(slowed_right_ciclu1)
+                .lineToLinearHeading(inter_score_right_ciclu1)
+                .splineToLinearHeading(score_right_ciclu1, Math.toRadians(0))
+                .build();
+
+        TrajectorySequence SCORE_RIGHT_CICLU_2 = drive.trajectorySequenceBuilder(slowed_right_ciclu2)
+                .lineToLinearHeading(inter_score_right_ciclu2)
+                .splineToLinearHeading(score_right_ciclu2, Math.toRadians(0))
+                .build();
+
 
         drive.setPoseEstimate(start_pose);
         STROBOT status = STROBOT.START;
@@ -376,13 +425,13 @@ public class BlueLeftNearCenter extends LinearOpMode {
                         blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.SCORE_PRELOAD;
                         if(blueLeftCase == "left"){
                             storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
-                           storageAngle.rotation_i = 0;
+                            storageAngle.rotation_i = 0;
                         } else if(blueLeftCase == "center"){
                             storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
-                           storageAngle.rotation_i = 2;
+                            storageAngle.rotation_i = 2;
                         } else {
                             storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
-                           storageAngle.rotation_i = 4;
+                            storageAngle.rotation_i = 4;
                         }
                         status = STROBOT.YELLOW_DROP;
                     }
@@ -394,6 +443,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
                         leftLatch_Controller.CS = leftLatch_Controller.leftLatchStatus.OPEN;
                         rightLatch_Controller.CS = rightLatch_Controller.rightLatchStatus.OPEN;
                         score.reset();
+                        nrcicluri +=1;
                         status = status.GO_TO_STACK;
                     }
                     break;
@@ -401,27 +451,25 @@ public class BlueLeftNearCenter extends LinearOpMode {
 
                 case GO_TO_STACK: {
                     if(score.seconds() > 0.25) {
+                        if(nrcicluri == 1)
+                        {
                         if(blueLeftCase == "left"){
-                            drive.followTrajectorySequenceAsync(GO_STACK_LEFT);
+                            drive.followTrajectorySequenceAsync(COLLECT_LEFT_CICLU_1);
                         } else if (blueLeftCase == "center") {
-                            drive.followTrajectorySequenceAsync(GO_STACK_CENTER);
+                            drive.followTrajectorySequenceAsync(COLLECT_CENTER_CICLU_1);
                         } else {
-                            drive.followTrajectorySequenceAsync(GO_STACK_RIGHT);
+                            drive.followTrajectorySequenceAsync(COLLECT_RIGHT_CICLU_1);
                         }
-                        collect.reset();
-                        status = STROBOT.PREPARE_COLLECT;
-                    }
-                    break;
-                }
-
-                case GO_STACK_2: {
-                    if(score.seconds() > 0.25) {
-                        if(blueLeftCase == "left"){
-                            drive.followTrajectorySequenceAsync(GO_STACK_LEFT);
-                        } else if (blueLeftCase == "center") {
-                            drive.followTrajectorySequenceAsync(GO_STACK_CENTER_2);
-                        } else {
-                            drive.followTrajectorySequenceAsync(GO_STACK_RIGHT);
+                        }
+                        else
+                        {
+                            if(blueLeftCase == "left"){
+                                drive.followTrajectorySequenceAsync(COLLECT_LEFT_CICLU_2);
+                            } else if (blueLeftCase == "center") {
+                                drive.followTrajectorySequenceAsync(COLLECT_CENTER_CICLU_2);
+                            } else {
+                                drive.followTrajectorySequenceAsync(COLLECT_RIGHT_CICLU_2);
+                            }
                         }
                         collect.reset();
                         status = STROBOT.PREPARE_COLLECT;
@@ -436,6 +484,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
                     {
                         blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.COLLECT;
                         collect2.reset();
+                        lift.upCnt +=2;
                         status = STROBOT.COLLECT;
                     }
                     break;
@@ -501,38 +550,43 @@ public class BlueLeftNearCenter extends LinearOpMode {
                 case GO_SCORE:
                 {
                     r.collect.setPower(-1);
-                    if(blueLeftCase == "left"){
-                        lift.upCnt += 2;
-                        drive.followTrajectorySequenceAsync(SCORE_LEFT);
-                    } else if(blueLeftCase == "center"){
-                        lift.upCnt += 2;
-                        drive.followTrajectorySequenceAsync(SCORE_CENTER);
-                    } else {
-                        lift.upCnt += 3;
-                        drive.followTrajectorySequenceAsync(SCORE_RIGHT);
+                    if(nrcicluri == 1)
+                    {
+                        if(blueLeftCase == "left"){
+                            drive.followTrajectorySequenceAsync(SCORE_LEFT_CICLU_1);
+                        } else if(blueLeftCase == "center"){
+                            drive.followTrajectorySequenceAsync(SCORE_CENTER_CICLU_1);
+                        } else {
+                            drive.followTrajectorySequenceAsync(SCORE_RIGHT_CICLU_1);
+                        }
+                    }
+                    else
+                    {
+                        if(blueLeftCase == "left"){
+                            drive.followTrajectorySequenceAsync(SCORE_LEFT_CICLU_2);
+                        } else if(blueLeftCase == "center"){
+                            drive.followTrajectorySequenceAsync(SCORE_CENTER_CICLU_2);
+                        } else {
+                            drive.followTrajectorySequenceAsync(SCORE_RIGHT_CICLU_2);
+                        }
                     }
 
                     collectAngle.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
                     collectAngle.stack_level -=1;
                     score.reset();
-
-                    status = STROBOT.SYSTEMS;
-                    break;
-                }
-
-                case SYSTEMS:
-                {
-                    if(score.seconds() > 1.35)
-                    {
-                        blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.SCORE;
-                        status = STROBOT.PREPARE_FOR_SCORE;
-                    }
+                    status = STROBOT.PREPARE_FOR_SCORE;
                     break;
                 }
 
                 case PREPARE_FOR_SCORE:
                 {
+                    if(score.seconds() > 2.2)
+                    {
+
+                        blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.SCORE;
+                    }
                     if(!drive.isBusy())
+
                     { r.collect.setPower(0);
                         status = STROBOT.SCORE;}
                     break;
@@ -551,8 +605,9 @@ public class BlueLeftNearCenter extends LinearOpMode {
 
                 case CHECK_COLLECT:
                 {
-                    if(nrcicluri < 1)
+                    if(nrcicluri < 2)
                     {
+                        lift.upCnt += 2;
                         nrcicluri += 1;
                         //collectAngle.stack_level -= nrcicluri*2;
                         outtake.CS = outtake_Controller.outtakeStatus.INITIALIZE;
@@ -576,21 +631,21 @@ public class BlueLeftNearCenter extends LinearOpMode {
                     {
                         storage.CS = storage_Controller.storageStatus.COLLECT;
                     }
-                    if(collect.seconds() > 0.4)
-                {
-                    if(blueLeftCase == "left"){
-                        drive.followTrajectorySequenceAsync(PARK_FROM_RIGHT);
-                    } else if(blueLeftCase == "center"){
-                        drive.followTrajectorySequenceAsync(PARK_FROM_RIGHT);
-                    } else {
-                        drive.followTrajectorySequenceAsync(PARK_FROM_LEFT);
-                    }
-                }
+//                    if(collect.seconds() > 0.4)
+//                    {
+//                        if(blueLeftCase == "left"){
+//                            drive.followTrajectorySequenceAsync(PARK_FROM_RIGHT);
+//                        } else if(blueLeftCase == "center"){
+//                            drive.followTrajectorySequenceAsync(PARK_FROM_RIGHT);
+//                        } else {
+//                            drive.followTrajectorySequenceAsync(PARK_FROM_LEFT);
+//                        }
+//                    }
                     if(collect.seconds() > 0.45)
                     {
                         lift.pid =0 ;
                         lift.CS = lift_Controller.liftStatus.DOWN;
-                        status = NOTHING;
+                        status = STROBOT.NOTHING;
 
                     }
 
