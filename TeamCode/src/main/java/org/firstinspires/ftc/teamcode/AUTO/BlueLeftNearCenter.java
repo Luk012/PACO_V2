@@ -6,12 +6,16 @@ import static java.lang.Boolean.TRUE;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.AUTO.Recognition.BlueOpenCVMaster;
 import org.firstinspires.ftc.teamcode.AUTO_CONTROLLERS.Blue_LEFT;
 
@@ -54,6 +58,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
         PREPARE_COLLECT,
         GO_STACK_2,
         SYSTEMS,
+        SYNC_PATH,
         NOTHING,
     }
 
@@ -61,12 +66,12 @@ public class BlueLeftNearCenter extends LinearOpMode {
     public static double x_purple_left = 27, y_purple_left = 39, angle_purple_left = 270;
     public static double x_purple_center = 13.5, y_purple_center = 34, angle_purple_center = 270;
     public static double x_purple_right = 9.5, y_purple_right = 27.5, angle_purple_right = 180;
-    public static double x_yellow_left = 46, y_yellow_left = 38.5, angle_yellow_left = 180;
-    public static double x_yellow_center = 47, y_yellow_center = 38, angle_yellow_center = 180;
-    public static double x_yellow_right = 47, y_yellow_right = 32, angle_yellow_right = 180;
-    public static double x_stack = -59.5, y_stack = 5, angle_stack = 180;
-    public static double x_interstack = -5, y_inetrstack = 5 , angle_interstack = 180;
-    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 5, angle_prepare = 180;
+    public static double x_yellow_left = 40, y_yellow_left = 38.5, angle_yellow_left = 180;
+    public static double x_yellow_center = 40, y_yellow_center = 38, angle_yellow_center = 180;
+    public static double x_yellow_right = 40, y_yellow_right = 32, angle_yellow_right = 180;
+    public static double x_stack = -59.5, y_stack = 8, angle_stack = 180;
+    public static double x_interstack = -5, y_inetrstack = 8 , angle_interstack = 180;
+    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 8, angle_prepare = 180;
     public static double x_lung_de_linie = -25, y_lung_de_linie = 59, angle_lung_de_linie = 180;
     public static double x_park_from_right = 48, y_park_from_right = 62, angle_park_from_right = 180;
 
@@ -131,7 +136,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
         Pose2d purple_left = new Pose2d(x_purple_left-2, y_purple_left, Math.toRadians(angle_purple_left));
         Pose2d purple_center = new Pose2d(x_purple_center, y_purple_center - 1, Math.toRadians(angle_purple_center));
         Pose2d purple_right = new Pose2d(x_purple_right +1, y_purple_right, Math.toRadians(angle_purple_right));
-        Pose2d yellow_left = new Pose2d(x_yellow_left, y_yellow_left+0.5, Math.toRadians(angle_yellow_left));
+        Pose2d yellow_left = new Pose2d(x_yellow_left + 6, y_yellow_left+0.5, Math.toRadians(angle_yellow_left));
 
         Pose2d stack = new Pose2d(x_stack, y_stack, Math.toRadians(angle_stack));
 
@@ -143,7 +148,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
 
         Pose2d yellow_right = new Pose2d(x_yellow_right -2, y_yellow_right -2.5, Math.toRadians(angle_yellow_right));
         Pose2d yellow_right2 = new Pose2d(x_yellow_right-3.1, y_yellow_right , Math.toRadians(angle_yellow_right));
-        Pose2d yellow_right3 = new Pose2d(x_yellow_right-2.5, y_yellow_right+2.5, Math.toRadians(angle_yellow_right));
+        Pose2d yellow_right3 = new Pose2d(x_yellow_right-2.5, y_yellow_right+7, Math.toRadians(angle_yellow_right));
         Pose2d yellow_right4 = new Pose2d(x_yellow_right -2, y_yellow_right +1, Math.toRadians(angle_yellow_right));
 
 
@@ -159,6 +164,12 @@ public class BlueLeftNearCenter extends LinearOpMode {
 
         TrajectorySequence PURPLE_LEFT = drive.trajectorySequenceBuilder(start_pose)
                 .lineToLinearHeading(purple_left)
+                .build();
+
+        TrajectorySequence TRAJ = drive.trajectorySequenceBuilder(yellow_right3)
+                .back(30,
+                        SampleMecanumDrive.getVelocityConstraint(25, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         TrajectorySequence PURPLE_CENTER = drive.trajectorySequenceBuilder(start_pose)
@@ -400,7 +411,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
                 }
 
                 case GO_TO_STACK: {
-                    if(score.seconds() > 0.25) {
+                    if(score.seconds() > 0.01) {
                         if(blueLeftCase == "left"){
                             drive.followTrajectorySequenceAsync(GO_STACK_LEFT);
                         } else if (blueLeftCase == "center") {
@@ -525,27 +536,34 @@ public class BlueLeftNearCenter extends LinearOpMode {
                     if(score.seconds() > 1.35)
                     {
                         blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.SCORE;
-                        status = STROBOT.PREPARE_FOR_SCORE;
+                        status = STROBOT.SYNC_PATH;
                     }
                     break;
                 }
 
                 case PREPARE_FOR_SCORE:
                 {
-                    if(!drive.isBusy())
+                    if(r.back.getDistance(DistanceUnit.CM) <= 28)
                     { r.collect.setPower(0);
                         status = STROBOT.SCORE;}
                     break;
                 }
 
+                case SYNC_PATH:
+                {
+                    if(!drive.isBusy())
+                    {
+                        drive.followTrajectorySequenceAsync(TRAJ);
+                        status = STROBOT.PREPARE_FOR_SCORE;
+                    }
+                    break;
+                }
+
                 case SCORE:
                 {
-                    if(blue_left.CurrentStatus == Blue_LEFT.autoControllerStatus.SCORE_DONE)
-                    {
                         leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
                         rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
                         status = STROBOT.CHECK_COLLECT;
-                    }
                     break;
                 }
 
