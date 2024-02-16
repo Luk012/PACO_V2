@@ -96,7 +96,7 @@ public class RedRightNearCenter extends LinearOpMode {
 
         collectAngle_Controller collectAngle = new collectAngle_Controller();
         outtake_Controller outtake = new outtake_Controller();
-        fourBar_Controller fourbar = new fourBar_Controller(r);
+        fourBar_Controller fourbar = new fourBar_Controller();
         leftLatch_Controller leftLatch = new leftLatch_Controller();
         lift_Controller lift = new lift_Controller();
         pto_Controller pto = new pto_Controller();

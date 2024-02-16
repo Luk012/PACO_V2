@@ -26,7 +26,7 @@ public class robotMap{
     public DcMotor lift = null;
     public DcMotor collect = null;
 
-    public  Servo left_fourbar = null;
+    public Servo left_fourbar = null;
     public Servo right_fourbar = null;
 
     public Servo storage = null;
@@ -45,6 +45,7 @@ public class robotMap{
     public DigitalChannel right_pixel = null;
 
     public DistanceSensor back = null;
+    public DistanceSensor right = null;
 
     //public IMU imu;
 
@@ -79,6 +80,7 @@ public class robotMap{
         right_pixel = Init.get(DigitalChannel.class, "right_pixel");
 
         back = Init.get(DistanceSensor.class, "back");
+        right = Init.get(DistanceSensor.class, "right");
 
 
         //imu = Init.get(IMU.class, "imu");
@@ -118,6 +120,11 @@ public class robotMap{
 
        left_latch.setDirection(Servo.Direction.FORWARD);
        right_latch.setDirection(Servo.Direction.FORWARD);
+
+       right_fourbar.setDirection(Servo.Direction.REVERSE);
+       left_fourbar.setDirection(Servo.Direction.FORWARD);
+
+
 
        pto.setDirection(Servo.Direction.FORWARD);
 

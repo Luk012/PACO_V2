@@ -76,7 +76,7 @@ public class OpMode extends LinearOpMode {
 
         collectAngle_Controller collectAngle = new collectAngle_Controller();
       drone_Controller drone = new drone_Controller();
-        fourBar_Controller fourBar = new fourBar_Controller(r);
+        fourBar_Controller fourBar = new fourBar_Controller();
         leftLatch_Controller leftLatch = new leftLatch_Controller();
         pto_Controller pto = new pto_Controller();
         rightLatch_Controller rightLatch = new rightLatch_Controller();
