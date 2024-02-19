@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.AUTO.Recognition.BlueOpenCVMaster;
 import org.firstinspires.ftc.teamcode.AUTO_CONTROLLERS.Blue_LEFT;
 
 import org.firstinspires.ftc.teamcode.DistanceSensorCalibrator;
+import org.firstinspires.ftc.teamcode.KalmanFilter.KalmanFilter;
 import org.firstinspires.ftc.teamcode.LowPassFilter;
 import org.firstinspires.ftc.teamcode.RoadRunner.DriveConstants;
 import org.firstinspires.ftc.teamcode.RoadRunner.SampleMecanumDrive;
@@ -40,9 +41,9 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.sequencesegment.WaitSeg
 import java.util.List;
 
 @Config
-@Autonomous(group = "Auto" , name = "lucanomia")
+@Autonomous(group = "Auto" , name = "lucanomia kalmanica")
 
-public class BlueLeftNearCenter extends LinearOpMode {
+public class BlueLeftNearCenterKalman extends LinearOpMode {
 
     enum STROBOT {
         START,
@@ -75,9 +76,9 @@ public class BlueLeftNearCenter extends LinearOpMode {
     public static double x_yellow_left = 40, y_yellow_left = 38.5, angle_yellow_left = 180;
     public static double x_yellow_center = 40, y_yellow_center = 38, angle_yellow_center = 180;
     public static double x_yellow_right = 40, y_yellow_right = 32, angle_yellow_right = 180;
-    public static double x_stack = -59.5, y_stack = 11, angle_stack = 180;
-    public static double x_interstack = -5, y_inetrstack = 11 , angle_interstack = 180;
-    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 11, angle_prepare = 180;
+    public static double x_stack = -59.5, y_stack = 8, angle_stack = 180;
+    public static double x_interstack = -5, y_inetrstack = 8 , angle_interstack = 180;
+    public static double x_prepare_for_stack = 27.5, y_prepare_for_stack = 8, angle_prepare = 180;
     public static double x_lung_de_linie = -25, y_lung_de_linie = 59, angle_lung_de_linie = 180;
     public static double x_park_from_right = 48, y_park_from_right = 62, angle_park_from_right = 180;
 
@@ -89,6 +90,10 @@ public class BlueLeftNearCenter extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        double Q = 0.5;
+        double R = 4;
+        int N = 5;
+
         BlueOpenCVMaster blueLeft = new BlueOpenCVMaster(this);
         blueLeft.observeStick();
 
@@ -98,6 +103,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
         List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
 
         LowPassFilter l = new LowPassFilter(0.9, r.back.getDistance(DistanceUnit.CM));
+        KalmanFilter filter = new KalmanFilter(Q, R, N);
 
         double currentVoltage;
         VoltageSensor batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
@@ -146,9 +152,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
         Pose2d purple_left = new Pose2d(x_purple_left-2, y_purple_left, Math.toRadians(angle_purple_left));
         Pose2d purple_left_senzor = new Pose2d(x_purple_left+3, y_purple_left, Math.toRadians(180));
         Pose2d purple_center = new Pose2d(x_purple_center, y_purple_center - 1, Math.toRadians(angle_purple_center));
-        Pose2d purple_center_senzor = new Pose2d(x_purple_center+3, y_purple_center - 1, Math.toRadians(180));
         Pose2d purple_right = new Pose2d(x_purple_right +1, y_purple_right, Math.toRadians(angle_purple_right));
-        Pose2d purple_right_senzor = new Pose2d(x_purple_right +4, y_purple_right, Math.toRadians(180));
         Pose2d yellow_left = new Pose2d(x_yellow_left + 3, y_yellow_left+0.5, Math.toRadians(angle_yellow_left));
 
         Pose2d stack = new Pose2d(x_stack, y_stack, Math.toRadians(angle_stack));
@@ -187,18 +191,6 @@ public class BlueLeftNearCenter extends LinearOpMode {
                 .build();
 
         TrajectorySequence PRELOAD_LEFT_SENSOR = drive.trajectorySequenceBuilder(purple_left_senzor)
-                .back(30,
-                        SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .build();
-
-        TrajectorySequence PRELOAD_CENTER_SENSOR = drive.trajectorySequenceBuilder(purple_center_senzor)
-                .back(30,
-                        SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .build();
-
-        TrajectorySequence PRELOAD_RIGHT_SENSOR = drive.trajectorySequenceBuilder(purple_right_senzor)
                 .back(30,
                         SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -331,7 +323,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
 
         TrajectorySequence SCORE_RIGHT = drive.trajectorySequenceBuilder(stack)
                 .setTangent(70)
-               // .splineToLinearHeading(lung_de_linie_score, Math.toRadians(0))
+                // .splineToLinearHeading(lung_de_linie_score, Math.toRadians(0))
                 .lineToLinearHeading(prepare_for_stack_score)
                 .splineToLinearHeading(yellow_right4, Math.toRadians(0))
                 //.splineToLinearHeading(yellow_right, Math.toRadians(270))
@@ -388,7 +380,8 @@ public class BlueLeftNearCenter extends LinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             int position = r.lift.getCurrentPosition();
-
+            double currentValue = r.back.getDistance(DistanceUnit.CM);
+            double estimate = filter.estimate(currentValue);
 
             switch (status) {
 
@@ -411,14 +404,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
                 case SYNC_PATH_PRELOAD:
                 {
                     if(!drive.isBusy()) {
-                        if(blueLeftCase == "left"){
-                            drive.followTrajectorySequenceAsync(PRELOAD_LEFT_SENSOR);
-                        } else if(blueLeftCase == "center") {
-                            drive.followTrajectorySequenceAsync(PRELOAD_CENTER_SENSOR);
-                        } else {
-                            drive.followTrajectorySequenceAsync(PRELOAD_RIGHT_SENSOR);
-                        }
-
+                        drive.followTrajectorySequenceAsync(PRELOAD_LEFT_SENSOR);
                         status = STROBOT.PREPARE_TO_DROP_YELLOW;
                     }
                     break;
@@ -446,10 +432,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
 
                 case PREPARE_TO_DROP_YELLOW:
                 {
-                    double rawReading = r.back.getDistance(DistanceUnit.CM);
-                    double calibratedDistance = calibrator.calibrate(rawReading);
-
-                    if(calibratedDistance <= 22) {
+                    if(estimate <= 22) {
                         status = STROBOT.YELLOW_DROP;
                     }
                     break;
@@ -478,13 +461,13 @@ public class BlueLeftNearCenter extends LinearOpMode {
                         blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.SCORE_PRELOAD;
                         if(blueLeftCase == "left"){
                             storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
-                           storageAngle.rotation_i = 0;
+                            storageAngle.rotation_i = 0;
                         } else if(blueLeftCase == "center"){
                             storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
-                           storageAngle.rotation_i = 2;
+                            storageAngle.rotation_i = 2;
                         } else {
                             storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
-                           storageAngle.rotation_i = 4;
+                            storageAngle.rotation_i = 4;
                         }
                         status = STROBOT.YELLOW_DROP;
                     }
@@ -493,25 +476,25 @@ public class BlueLeftNearCenter extends LinearOpMode {
 
                 case YELLOW_DROP: {
 
-                        leftLatch_Controller.CS = leftLatch_Controller.leftLatchStatus.OPEN;
-                        rightLatch_Controller.CS = rightLatch_Controller.rightLatchStatus.OPEN;
-                        score.reset();
-                        status = status.GO_TO_STACK;
+                    leftLatch_Controller.CS = leftLatch_Controller.leftLatchStatus.OPEN;
+                    rightLatch_Controller.CS = rightLatch_Controller.rightLatchStatus.OPEN;
+                    score.reset();
+                    status = status.GO_TO_STACK;
 
                     break;
                 }
 
                 case GO_TO_STACK: {
 
-                        if(blueLeftCase == "left"){
-                            drive.followTrajectorySequenceAsync(GO_STACK_LEFT);
-                        } else if (blueLeftCase == "center") {
-                            drive.followTrajectorySequenceAsync(GO_STACK_CENTER);
-                        } else {
-                            drive.followTrajectorySequenceAsync(GO_STACK_RIGHT);
-                        }
-                        collect.reset();
-                        status = STROBOT.PREPARE_COLLECT;
+                    if(blueLeftCase == "left"){
+                        drive.followTrajectorySequenceAsync(GO_STACK_LEFT);
+                    } else if (blueLeftCase == "center") {
+                        drive.followTrajectorySequenceAsync(GO_STACK_CENTER);
+                    } else {
+                        drive.followTrajectorySequenceAsync(GO_STACK_RIGHT);
+                    }
+                    collect.reset();
+                    status = STROBOT.PREPARE_COLLECT;
                     break;
                 }
 
@@ -633,18 +616,14 @@ public class BlueLeftNearCenter extends LinearOpMode {
 
                 case PREPARE_FOR_SCORE:
                 {
-                    double rawReading = r.back.getDistance(DistanceUnit.CM);
-                    double calibratedDistance = calibrator.calibrate(rawReading);
-
-
                     if(nrcicluri==0){
-                        if(calibratedDistance <= 22.4) {
+                        if(estimate <= 22.4) {
                             r.collect.setPower(0);
                             status = STROBOT.SCORE;
                         }
                     }
                     if(nrcicluri>0) {
-                        if (calibratedDistance <= 22.4) {
+                        if (estimate <= 22.4) {
                             r.collect.setPower(0);
                             status = STROBOT.SCORE;
                         }
@@ -663,9 +642,9 @@ public class BlueLeftNearCenter extends LinearOpMode {
 
                 case SCORE:
                 {
-                        leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
-                        rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
-                        status = STROBOT.CHECK_COLLECT;
+                    leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
+                    rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
+                    status = STROBOT.CHECK_COLLECT;
                     break;
                 }
 
@@ -697,20 +676,20 @@ public class BlueLeftNearCenter extends LinearOpMode {
                         storage.CS = storage_Controller.storageStatus.COLLECT;
                     }
                     if(collect.seconds() > 0.01)
-                {
-                    if(blueLeftCase == "left"){
-                        drive.followTrajectorySequenceAsync(PARK_FROM_RIGHT);
-                    } else if(blueLeftCase == "center"){
-                        drive.followTrajectorySequenceAsync(PARK_FROM_RIGHT);
-                    } else {
-                        drive.followTrajectorySequenceAsync(PARK_FROM_LEFT);
+                    {
+                        if(blueLeftCase == "left"){
+                            drive.followTrajectorySequenceAsync(PARK_FROM_RIGHT);
+                        } else if(blueLeftCase == "center"){
+                            drive.followTrajectorySequenceAsync(PARK_FROM_RIGHT);
+                        } else {
+                            drive.followTrajectorySequenceAsync(PARK_FROM_LEFT);
+                        }
                     }
-                }
                     if(collect.seconds() > 0.45)
                     {
                         lift.pid =0 ;
                         lift.CS = lift_Controller.liftStatus.DOWN;
-                        status = NOTHING;
+                        status = STROBOT.NOTHING;
 
                     }
 
