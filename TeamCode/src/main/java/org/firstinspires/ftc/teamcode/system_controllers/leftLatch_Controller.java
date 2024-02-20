@@ -15,6 +15,8 @@ public class leftLatch_Controller {
         CLOSE,
         CLOSE_2,
         CLOSE_DONE,
+        CLOSE_AUTO,
+        CLOSE_AUTO_2,
     }
 
     public leftLatch_Controller(){
@@ -29,10 +31,11 @@ public class leftLatch_Controller {
     public static double close = 0.665;
 
     ElapsedTime latch = new ElapsedTime();
+    ElapsedTime latch_auto = new ElapsedTime();
 
     public void update(robotMap r)
     {
-        if(CS != PS || CS == leftLatchStatus.INITIALIZE || CS == leftLatchStatus.CLOSE || CS == leftLatchStatus.CLOSE_2 || CS == leftLatchStatus.CLOSE_DONE)
+        if(CS != PS || CS == leftLatchStatus.INITIALIZE || CS == leftLatchStatus.CLOSE || CS == leftLatchStatus.CLOSE_2 || CS == leftLatchStatus.CLOSE_DONE || CS == leftLatchStatus.CLOSE_AUTO || CS == leftLatchStatus.CLOSE_AUTO_2)
         {
             switch (CS)
             {
@@ -68,6 +71,25 @@ public class leftLatch_Controller {
                     }
                     break;
                 }
+
+                case CLOSE_AUTO:
+                {
+                    latch_auto.reset();
+                    CS = leftLatchStatus.CLOSE_AUTO_2;
+                    break;
+                }
+
+                case CLOSE_AUTO_2:
+                {
+                    if(latch_auto.seconds() > 0.4){
+                        r.left_latch.setPosition(close);
+                    }
+                    if(latch_auto.seconds() > 0.55){
+                        CS = leftLatchStatus.CLOSE_DONE;
+                    }
+                    break;
+                }
+
             }
         }
 
