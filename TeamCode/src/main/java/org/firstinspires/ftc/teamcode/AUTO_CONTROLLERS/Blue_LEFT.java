@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.globals.InverseKinematics;
 import org.firstinspires.ftc.teamcode.globals.robotMap;
 import org.firstinspires.ftc.teamcode.system_controllers.fourBar_Controller;
+import org.firstinspires.ftc.teamcode.system_controllers.leftLatch_Controller;
 import org.firstinspires.ftc.teamcode.system_controllers.lift_Controller;
+import org.firstinspires.ftc.teamcode.system_controllers.rightLatch_Controller;
 import org.firstinspires.ftc.teamcode.system_controllers.storageAngle_Controller;
 import org.firstinspires.ftc.teamcode.system_controllers.storage_Controller;
 
@@ -41,6 +43,8 @@ public class Blue_LEFT {
         SCORE_PRELOAD_AUTO,
         SCORE_PRELOAD_LIFT_2,
         SCORE_PRELOAD_SYSTEMS_2,
+        SCORE_26,
+        SCORE_262,
 
     }
     public static autoControllerStatus CurrentStatus = autoControllerStatus.NOTHING, PreviousStatus = autoControllerStatus.NOTHING;
@@ -52,8 +56,9 @@ public class Blue_LEFT {
     ElapsedTime inter = new ElapsedTime();
     ElapsedTime slow = new ElapsedTime();
     ElapsedTime slow2 = new ElapsedTime();
+    ElapsedTime timer2 = new ElapsedTime();
 
-    public void update(robotMap r, lift_Controller lift, InverseKinematics ik, fourBar_Controller fourbar, storage_Controller storage, storageAngle_Controller storageAngle)
+    public void update(robotMap r, lift_Controller lift, InverseKinematics ik, fourBar_Controller fourbar, storage_Controller storage, storageAngle_Controller storageAngle, leftLatch_Controller leftLatch, rightLatch_Controller rightLatch)
     {
         switch (CurrentStatus)
         {
@@ -92,6 +97,30 @@ public class Blue_LEFT {
                     lift.CS = lift_Controller.liftStatus.UP;
                     scorev2.reset();
                     CurrentStatus = autoControllerStatus.SCORE_PRELOAD_SYSTEMS;
+                }
+                break;
+            }
+
+
+            case SCORE_26:{
+                timer2.reset();
+                CurrentStatus = autoControllerStatus.SCORE_262;
+                break;
+            }
+
+            case SCORE_262:{
+                if(timer2.seconds() > 0.85)
+                {
+                    fourbar.CS = fourBar_Controller.fourbarStatus.SCORE;
+                }
+                if(timer2.seconds() > 0.95)
+                {
+                    storage.CS = storage_Controller.storageStatus.SCORE;
+                }
+                if(timer2.seconds() > 1.5)
+                {
+                    rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
+                    leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
                 }
                 break;
             }

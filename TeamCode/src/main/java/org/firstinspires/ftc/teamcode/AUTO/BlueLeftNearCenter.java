@@ -139,7 +139,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
         storage.update(r);
         storageAngle.update(r);
         outtake.update( fourbar, storage, storageAngle, lift, rightLatch,leftLatch);
-        blue_left.update(r, lift, ik, fourbar, storage, storageAngle);
+        blue_left.update(r, lift, ik, fourbar, storage, storageAngle, leftLatch, rightLatch);
         pto.update(r);
 
         Pose2d start_pose = new Pose2d(x_start, y_start,Math.toRadians(angle_start));
@@ -703,7 +703,7 @@ public class BlueLeftNearCenter extends LinearOpMode {
             storage.update(r);
             storageAngle.update(r);
             outtake.update( fourbar, storage, storageAngle, lift, rightLatch,leftLatch);
-            blue_left.update(r, lift, ik, fourbar, storage, storageAngle);
+            blue_left.update(r, lift, ik, fourbar, storage, storageAngle, leftLatch, rightLatch);
             pto.update(r);
             drive.update();
 
