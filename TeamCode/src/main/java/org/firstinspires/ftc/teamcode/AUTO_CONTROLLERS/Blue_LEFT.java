@@ -38,6 +38,9 @@ public class Blue_LEFT {
        PRELOADGROUNDDONE,
         SCORE_LIFT_2,
         SCORE_2,
+        SCORE_PRELOAD_AUTO,
+        SCORE_PRELOAD_LIFT_2,
+        SCORE_PRELOAD_SYSTEMS_2,
 
     }
     public static autoControllerStatus CurrentStatus = autoControllerStatus.NOTHING, PreviousStatus = autoControllerStatus.NOTHING;
@@ -47,6 +50,8 @@ public class Blue_LEFT {
     ElapsedTime scorev2 = new ElapsedTime();
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime inter = new ElapsedTime();
+    ElapsedTime slow = new ElapsedTime();
+    ElapsedTime slow2 = new ElapsedTime();
 
     public void update(robotMap r, lift_Controller lift, InverseKinematics ik, fourBar_Controller fourbar, storage_Controller storage, storageAngle_Controller storageAngle)
     {
@@ -193,6 +198,14 @@ public class Blue_LEFT {
                 break;
             }
 
+            case SCORE_PRELOAD_AUTO:
+            {
+                ik.updateServoPositions();
+                slow.reset();
+                CurrentStatus = autoControllerStatus.SCORE_PRELOAD_LIFT_2;
+                break;
+            }
+
             case SCORE_2:{
                 ik.updateServoPositions();
                 inter.reset();
@@ -231,6 +244,18 @@ public class Blue_LEFT {
                 break;
             }
 
+            case SCORE_PRELOAD_LIFT_2:
+            {
+                if(slow.seconds() > 0.1)
+                {
+                    lift.pid = 1;
+                    lift.CS = lift_Controller.liftStatus.UP;
+                    slow2.reset();
+                    CurrentStatus = autoControllerStatus.SCORE_PRELOAD_SYSTEMS_2;
+                }
+                break;
+            }
+
             case SCORE_SYSTEMS:
             {
                 if(scorev2.seconds() > 0.15)
@@ -243,6 +268,23 @@ public class Blue_LEFT {
                     fourbar.CS = fourBar_Controller.fourbarStatus.SCORE;
                 }
                 if(scorev2.seconds() > 1.5)
+                {
+                    CurrentStatus = autoControllerStatus.SCORE_DONE;
+                }
+                break;
+            }
+
+            case SCORE_PRELOAD_SYSTEMS_2:
+            {
+                if(slow2.seconds() > 0.15)
+                {
+                    fourbar.CS = fourBar_Controller.fourbarStatus.SCORE;
+                }
+                if(slow2.seconds() > 0.25)
+                {
+                    storage.CS = storage_Controller.storageStatus.SCORE;
+                }
+                if(slow2.seconds() > 1.5)
                 {
                     CurrentStatus = autoControllerStatus.SCORE_DONE;
                 }
