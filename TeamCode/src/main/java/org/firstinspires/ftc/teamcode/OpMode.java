@@ -75,7 +75,7 @@ public class OpMode extends LinearOpMode {
 
 
         collectAngle_Controller collectAngle = new collectAngle_Controller();
-      drone_Controller drone = new drone_Controller();
+        drone_Controller drone = new drone_Controller();
         fourBar_Controller fourBar = new fourBar_Controller();
         leftLatch_Controller leftLatch = new leftLatch_Controller();
         pto_Controller pto = new pto_Controller();
@@ -91,31 +91,31 @@ public class OpMode extends LinearOpMode {
         double voltage;
         double loopTime = 0;
         VoltageSensor batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
-       voltage = batteryVoltageSensor.getVoltage();
+        voltage = batteryVoltageSensor.getVoltage();
 
-       collectAngle.CS = collectAngle_Controller.collectAngleStatus.GROUND;
-      drone.CS = drone_Controller.droneStatus.INITIALIZE;
-       fourBar.CS = fourBar_Controller.fourbarStatus.COLLECT;
-       leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
-       pto.CS = pto_Controller.ptoStatus.OFF;
-       rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
-       storageAngle.CS = storageAngle_Controller.storageAngleStatus.INITIALIZE;
-       storage.CS = storage_Controller.storageStatus.COLLECT;
-       lift.CS = lift_Controller.liftStatus.DOWN;
-       outtake.CS = outtake_Controller.outtakeStatus.INITIALIZE;
+        collectAngle.CS = collectAngle_Controller.collectAngleStatus.GROUND;
+        drone.CS = drone_Controller.droneStatus.INITIALIZE;
+        fourBar.CS = fourBar_Controller.fourbarStatus.COLLECT;
+        leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
+        pto.CS = pto_Controller.ptoStatus.OFF;
+        rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
+        storageAngle.CS = storageAngle_Controller.storageAngleStatus.INITIALIZE;
+        storage.CS = storage_Controller.storageStatus.COLLECT;
+        lift.CS = lift_Controller.liftStatus.DOWN;
+        outtake.CS = outtake_Controller.outtakeStatus.INITIALIZE;
 
 
 
-       collectAngle.update(r);
-       drone.update(r);
-       fourBar.update(r);
-       leftLatch.update(r);
-       pto.update(r);
-       rightLatch.update(r);
-       storageAngle.update(r);
-       storage.update(r);
-       lift.update(r, 0, voltage);
-       outtake.update( fourBar, storage, storageAngle, lift, rightLatch,leftLatch);
+        collectAngle.update(r);
+        drone.update(r);
+        fourBar.update(r);
+        leftLatch.update(r);
+        pto.update(r);
+        rightLatch.update(r);
+        storageAngle.update(r);
+        storage.update(r);
+        lift.update(r, 0, voltage);
+        outtake.update( fourBar, storage, storageAngle, lift, rightLatch,leftLatch);
 
 
 
@@ -125,7 +125,7 @@ public class OpMode extends LinearOpMode {
 
         lift.upCnt = 0;
         storageAngle.rotation_i = 2;
-        collectAngle.stack_level = 0;
+        collectAngle.stack_level = 4;
 
 
 
@@ -146,7 +146,7 @@ public class OpMode extends LinearOpMode {
 
         waitForStart();
 
-timer.reset();
+        timer.reset();
 
         while (opModeIsActive() && !isStopRequested()) {
 
@@ -173,41 +173,42 @@ timer.reset();
             }
 
 
-          double collect_input = gamepad2.right_trigger - gamepad2.left_trigger;
+            double collect_input = gamepad2.right_trigger - gamepad2.left_trigger;
 
 
-          if(!previousGamepad2.square && currentGamepad2.square)
-          {
-              stack = !stack;
-          }
+            if(!previousGamepad2.square && currentGamepad2.square)
+            {
+                stack = !stack;
+                collectAngle.stack_level = 4;
+            }
 
-          if(stack)
-          {
-              if(collect_power > 0)
-              {
-                  collectAngle.CS = collectAngle_Controller.collectAngleStatus.STACK;
-              }
-              else
-              {
-                  collectAngle.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
-              }
-          } else
-          {
-              if(collect_power > 0)
-              {
-                  collectAngle.CS = collectAngle_Controller.collectAngleStatus.GROUND;
-              }
-              else
-              {
-                  collectAngle.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
-              }
-          }
+            if(stack)
+            {
+                if(collect_power > 0)
+                {
+                    collectAngle.CS = collectAngle_Controller.collectAngleStatus.STACK;
+                }
+                else
+                {
+                    collectAngle.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
+                }
+            } else
+            {
+                if(collect_power > 0)
+                {
+                    collectAngle.CS = collectAngle_Controller.collectAngleStatus.GROUND;
+                }
+                else
+                {
+                    collectAngle.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
+                }
+            }
 
 
             if(outtake.CS == outtake_Controller.outtakeStatus.COLLECTDONE || outtake.CS == outtake_Controller.outtakeStatus.INITIALIZE) {
 
                 if (r.left_pixel.getState() == FALSE && leftLatch.CS == leftLatch_Controller.leftLatchStatus.OPEN) {
-                        leftLatch.CS = leftLatch_Controller.leftLatchStatus.CLOSE;
+                    leftLatch.CS = leftLatch_Controller.leftLatchStatus.CLOSE;
                 }
                 if(r.right_pixel.getState() == FALSE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.OPEN)
                 {
@@ -224,37 +225,37 @@ timer.reset();
 
             }
 
-          if(lift.CS == lift_Controller.liftStatus.DOWN && leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE && outtake.CS != outtake_Controller.outtakeStatus.INTER && r.left_pixel.getState() == FALSE && r.right_pixel.getState() == FALSE)
-          {
-              scuipa.reset();
-              outtake.CS = outtake_Controller.outtakeStatus.INTER;
-          }
+            if(lift.CS == lift_Controller.liftStatus.DOWN && leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE && outtake.CS != outtake_Controller.outtakeStatus.INTER && r.left_pixel.getState() == FALSE && r.right_pixel.getState() == FALSE)
+            {
+                scuipa.reset();
+                outtake.CS = outtake_Controller.outtakeStatus.INTER;
+            }
 
-          if(scuipa.seconds() < 1 && timer.seconds() >2)
-          {
-              r.collect.setPower(-1);
-          }
+            if(scuipa.seconds() < 1 && timer.seconds() >2)
+            {
+                r.collect.setPower(-1);
+            }
 
 
-          if(r.left_pixel.getState() == FALSE && r.right_pixel.getState() == FALSE && collect_input > 0)
-          {
-              gamepad1.rumble(100);
-              gamepad2.rumble(101);
-          }
+            if(r.left_pixel.getState() == FALSE && r.right_pixel.getState() == FALSE && collect_input > 0)
+            {
+                gamepad1.rumble(100);
+                gamepad2.rumble(101);
+            }
 
-          if(!previousGamepad2.cross && currentGamepad2.cross)
-          {
-              if(lift.CS != lift_Controller.liftStatus.DOWN)
-              {storageAngle.rotation_i = 0;
-                  outtake.CS = outtake_Controller.outtakeStatus.COLLECT;
-              }
-              else
-              {
-                  storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
-                  outtake.CS = outtake_Controller.outtakeStatus.SCORE;
-              }
+            if(!previousGamepad2.cross && currentGamepad2.cross)
+            {
+                if(lift.CS != lift_Controller.liftStatus.DOWN)
+                {storageAngle.rotation_i = 0;
+                    outtake.CS = outtake_Controller.outtakeStatus.COLLECT;
+                }
+                else
+                {
+                    storageAngle.CS = storageAngle_Controller.storageAngleStatus.ROTATION;
+                    outtake.CS = outtake_Controller.outtakeStatus.SCORE;
+                }
 
-          }
+            }
 
             if(!previousGamepad2.dpad_up && currentGamepad2.dpad_up)
             {
@@ -270,12 +271,12 @@ timer.reset();
             if(!previousGamepad2.right_bumper && currentGamepad2.right_bumper && lift.CS == lift_Controller.liftStatus.UP)
             {
 
-                    storageAngle.rotation_i = Math.min(4, storageAngle.rotation_i+1);
+                storageAngle.rotation_i = Math.min(4, storageAngle.rotation_i+1);
             }
 
             if(!previousGamepad2.left_bumper && currentGamepad2.left_bumper && lift.CS == lift_Controller.liftStatus.UP)
             {
-                  storageAngle.rotation_i = Math.max(0, storageAngle.rotation_i-1);
+                storageAngle.rotation_i = Math.max(0, storageAngle.rotation_i-1);
             }
 
             if(!previousGamepad2.dpad_right && currentGamepad2.dpad_right)
@@ -300,25 +301,25 @@ timer.reset();
 
             if(!previousGamepad2.circle && currentGamepad2.circle)
             {
-                    if(storageAngle.rotation_i == 2 || storageAngle.rotation_i == 3 || storageAngle.rotation_i == 4)
+                if(storageAngle.rotation_i == 2 || storageAngle.rotation_i == 3 || storageAngle.rotation_i == 4)
+                {
+                    if(leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE)
                     {
-                            if(leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE)
-                            {
-                                leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
-                            } else
-                            {
-                                rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
-                            }
+                        leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
                     } else
                     {
-                        if(rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE)
-                        {
-                            rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
-                        } else
-                        {
-                           leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
-                        }
+                        rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
                     }
+                } else
+                {
+                    if(rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE)
+                    {
+                        rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
+                    } else
+                    {
+                        leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
+                    }
+                }
 
             }
 
@@ -337,12 +338,12 @@ timer.reset();
                     pto.CS = pto_Controller.ptoStatus.OFF;
             }
 
-            if(!previousGamepad1.dpad_up && currentGamepad1.dpad_up)
+            if(!previousGamepad1.right_bumper && currentGamepad1.right_bumper)
             {
                 collectAngle.stack_level = Math.min(4, collectAngle.stack_level+1);
             }
 
-            if(!previousGamepad1.dpad_down && currentGamepad1.dpad_down)
+            if(!previousGamepad1.left_bumper && currentGamepad1.left_bumper)
             {
                 collectAngle.stack_level = Math.max(0, collectAngle.stack_level-1);
             }
@@ -368,7 +369,7 @@ timer.reset();
 
 
             collectAngle.update(r);
-           drone.update(r);
+            drone.update(r);
             fourBar.update(r);
             leftLatch.update(r);
             pto.update(r);
@@ -388,8 +389,8 @@ timer.reset();
             telemetry.addData("left_pixel", r.left_pixel.getState());
             telemetry.addData("right_pixel", r.right_pixel.getState());
             telemetry.addData("collecy angle", collectAngle.CS);
-                    telemetry.addData("stack lever", collectAngle.stack_level);
-                    telemetry.addData("stack" ,stack);
+            telemetry.addData("stack lever", collectAngle.stack_level);
+            telemetry.addData("stack" ,stack);
             telemetry.addData("fourbar", fourBar.CS);
 
 
@@ -402,4 +403,3 @@ timer.reset();
         }
     }
 }
-
