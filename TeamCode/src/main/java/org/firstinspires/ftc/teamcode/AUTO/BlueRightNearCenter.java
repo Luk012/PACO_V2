@@ -4,6 +4,7 @@ import static java.lang.Boolean.TRUE;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -67,15 +68,17 @@ public class BlueRightNearCenter extends LinearOpMode {
     }
 
     public static double x_start = -37, y_start = 62, angle_start = 270;
-    public static double x_purple_left = -24, y_purple_left = 27, angle_purple_left = 270;
+    public static double x_purple_left = -18, y_purple_left = 34, angle_purple_left = 270;
     public static double x_purple_center = -38, y_purple_center = 29, angle_purple_center = 270;
     public static double x_purple_right = -45.3, y_purple_right = 40, angle_purple_right = 270;
-    public static double x_yellow_left = 38, y_yellow_left = 39, angle_yellow_left = 180;
+    public static double x_yellow_left = 38, y_yellow_left = 43, angle_yellow_left = 180;
     public static double x_yellow_center = 38, y_yellow_center = 36, angle_yellow_center = 180;
     public static double x_yellow_right = 38, y_yellow_right = 30, angle_yellow_right = 180;
     public static double x_stack = -49, y_stack = 33, angle_stack = 180;
     public static double stack_2_x = -51.3 , stack_2_y = 9.5, stack_2_angle = 180;
     public static double inter_x = -35.5, inter_y = 48, inter_angle = 270;
+    public static double inter_x13 = -35.5, inter_y13 = 35.5, inter_angle13 = 270;
+
     public static double x_interstack = -25, y_inetrstack = 9.5 , angle_interstack = 180;
     public static double x_prepare_for_stack = -47.5, y_prepare_for_stack = 9.5, angle_prepare = 180;
 
@@ -147,13 +150,15 @@ public class BlueRightNearCenter extends LinearOpMode {
         Pose2d purple_left = new Pose2d(x_purple_left, y_purple_left, Math.toRadians(angle_purple_left));
         Pose2d purple_center = new Pose2d(x_purple_center, y_purple_center +6, Math.toRadians(angle_purple_center));
         Pose2d purple_right = new Pose2d(x_purple_right +1, y_purple_right, Math.toRadians(angle_purple_right));
-        Pose2d yellow_left = new Pose2d(x_yellow_left, y_yellow_left, Math.toRadians(angle_yellow_left));
+        Pose2d yellow_left = new Pose2d(x_yellow_left, y_yellow_left+1, Math.toRadians(angle_yellow_left));
         Pose2d stack = new Pose2d(x_stack - 6, y_stack, Math.toRadians(angle_stack));
         Pose2d stack2 = new Pose2d(x_stack - 6, y_stack, Math.toRadians(angle_stack));
 
         Pose2d stack_michi = new Pose2d(stack_2_x, stack_2_y, Math.toRadians(stack_2_angle));
 
         Pose2d inetr = new Pose2d(inter_x, inter_y, Math.toRadians(inter_angle));
+        Pose2d inetr13 = new Pose2d(inter_x13, inter_y13, Math.toRadians(inter_angle13));
+
         Pose2d inetr_2 = new Pose2d(inter_x, inter_y-3, Math.toRadians(inter_angle));
 
         Pose2d stack_center = new Pose2d(x_stack - 6, y_stack, Math.toRadians(angle_stack));
@@ -163,6 +168,7 @@ public class BlueRightNearCenter extends LinearOpMode {
         Pose2d lung_de_linie = new Pose2d(x_lung_de_linie - 2, y_lung_de_linie-7.5, Math.toRadians(angle_lung_de_linie));
 
         Pose2d yellow_right = new Pose2d(x_yellow_right, y_yellow_right, Math.toRadians(angle_yellow_right));
+        Pose2d yellow_right_autoLeftCase = new Pose2d(x_yellow_right, y_yellow_right+1, Math.toRadians(angle_yellow_right));
         Pose2d park_from_right = new Pose2d(x_park_from_right, y_park_from_right, Math.toRadians(angle_park_from_right));
         Pose2d yellow_center = new Pose2d(x_yellow_center, y_yellow_center+3, Math.toRadians(angle_yellow_center));
         Pose2d park_from_left = new Pose2d(x_park_from_right, y_park_from_right, Math.toRadians(angle_park_from_right));
@@ -179,7 +185,7 @@ public class BlueRightNearCenter extends LinearOpMode {
 
 
         TrajectorySequence PURPLE_LEFT = drive.trajectorySequenceBuilder(start_pose)
-                .lineToLinearHeading(new Pose2d(-36 , 27))
+                .lineTo(new Vector2d(-36 , 36))
                 .lineToLinearHeading(purple_left)
                 .build();
 
@@ -267,7 +273,7 @@ public class BlueRightNearCenter extends LinearOpMode {
                 //.splineToLinearHeading(lung_de_linie_score, Math.toRadians(0))
                 .lineToLinearHeading(prepare_for_stack_score)
                 .lineToLinearHeading(interscore)
-                .lineToLinearHeading(yellow_left)
+                .lineToLinearHeading(yellow_right_autoLeftCase)
                 //.splineToLinearHeading(yellow_right, Math.toRadians(270))
 //                .lineToLinearHeading(lung_de_linie)
 //                .splineToLinearHeading(prepare_for_stack, Math.toRadians(180))
@@ -293,7 +299,7 @@ public class BlueRightNearCenter extends LinearOpMode {
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
-        TrajectorySequence PRELOAD_LEFT_SENSOR2 = drive.trajectorySequenceBuilder(yellow_left)
+        TrajectorySequence PRELOAD_LEFT_SENSOR2 = drive.trajectorySequenceBuilder(yellow_right_autoLeftCase)
                 .back(30,
                         SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -313,6 +319,7 @@ public class BlueRightNearCenter extends LinearOpMode {
 
 
         TrajectorySequence YELLOW_LEFT = drive.trajectorySequenceBuilder(purple_left)
+                .lineTo(new Vector2d(-36 , 34))
                 .lineToLinearHeading(yellow_left)
                 .build();
 
@@ -335,7 +342,8 @@ public class BlueRightNearCenter extends LinearOpMode {
                 .build();
 
         TrajectorySequence GO_STACK_WITH_PRELOAD_LEFT = drive.trajectorySequenceBuilder(purple_left)
-                .lineToLinearHeading(inetr)
+
+                .lineToLinearHeading(inetr13)
                 .lineToLinearHeading(stack)
                 .build();
 
@@ -788,7 +796,7 @@ public class BlueRightNearCenter extends LinearOpMode {
 
                 case CHECK_COLLECT:
                 {
-                    if(nrcicluri < 2) //1
+                    if(nrcicluri < 1) //1
                     {
                         if(nrcicluri >0)
                         {lift.upCnt += 2;}
@@ -820,12 +828,7 @@ public class BlueRightNearCenter extends LinearOpMode {
 
                 case PARK:
                 {
-                    if(collect.seconds() > 0.3)
-                    {
-                        blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.COLLECT;
-
-                    }
-                    if(collect.seconds() > 0.65)
+                    if(collect.seconds() > 0.01)
                     {
                         if(blueRightCase == "left"){
                             drive.followTrajectorySequenceAsync(PARK_FROM_RIGHT);
@@ -835,6 +838,12 @@ public class BlueRightNearCenter extends LinearOpMode {
                             drive.followTrajectorySequenceAsync(PARK_FROM_LEFT);
                         }
                     }
+                    if(collect.seconds() > 0.3)
+                    {
+                        blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.COLLECT;
+                        status = STROBOT.NOTHING;
+                    }
+
                     break;
                 }
 
