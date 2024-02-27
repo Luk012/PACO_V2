@@ -45,6 +45,7 @@ public class Blue_LEFT {
         SCORE_PRELOAD_SYSTEMS_2,
         SCORE_26,
         SCORE_262,
+        RETRACT_SYSTEMS,
 
     }
     public static autoControllerStatus CurrentStatus = autoControllerStatus.NOTHING, PreviousStatus = autoControllerStatus.NOTHING;
@@ -57,6 +58,7 @@ public class Blue_LEFT {
     ElapsedTime slow = new ElapsedTime();
     ElapsedTime slow2 = new ElapsedTime();
     ElapsedTime timer2 = new ElapsedTime();
+    ElapsedTime retract = new ElapsedTime();
 
     public void update(robotMap r, lift_Controller lift, InverseKinematics ik, fourBar_Controller fourbar, storage_Controller storage, storageAngle_Controller storageAngle, leftLatch_Controller leftLatch, rightLatch_Controller rightLatch)
     {
@@ -109,18 +111,24 @@ public class Blue_LEFT {
             }
 
             case SCORE_262:{
-                if(timer2.seconds() > 0.85)
+                if(timer2.seconds() > 1.45)
                 {
                     fourbar.CS = fourBar_Controller.fourbarStatus.SCORE;
                 }
-                if(timer2.seconds() > 0.95)
+                if(timer2.seconds() > 1.55)
                 {
                     storage.CS = storage_Controller.storageStatus.SCORE;
                 }
-                if(timer2.seconds() > 1.5)
+                if(timer2.seconds() > 2.1)
                 {
                     rightLatch.CS = rightLatch_Controller.rightLatchStatus.OPEN;
                     leftLatch.CS = leftLatch_Controller.leftLatchStatus.OPEN;
+                }
+                if(timer2.seconds() > 2.3){
+                    fourbar.CS = fourBar_Controller.fourbarStatus.COLLECT;
+                }
+                if(timer2.seconds() > 2.4){
+                    storage.CS = storage_Controller.storageStatus.COLLECT;
                 }
                 break;
             }
@@ -316,6 +324,19 @@ public class Blue_LEFT {
                 if(slow2.seconds() > 1.5)
                 {
                     CurrentStatus = autoControllerStatus.SCORE_DONE;
+                }
+                break;
+            }
+
+            case RETRACT_SYSTEMS:{
+                storageAngle.rotation_i = 2;
+                if(retract.seconds() > 1.1)
+                {
+                    fourbar.CS = fourBar_Controller.fourbarStatus.INTER;
+                }
+                if(retract.seconds() > 1.3)
+                {
+                    storage.CS = storage_Controller.storageStatus.INTER;
                 }
                 break;
             }

@@ -65,6 +65,7 @@ public class BlueRightNearCenter extends LinearOpMode {
         SYNC_PATH2,
         GO_DROP_WHITE_PIXELS,
         GO_DROP_WHITE_PIXELS_SYSTEMS,
+        PARK_DOIPLUSCINCI,
     }
 
     public static double x_start = -37, y_start = 62, angle_start = 270;
@@ -176,6 +177,7 @@ public class BlueRightNearCenter extends LinearOpMode {
 
         Pose2d prepare_for_stack_score_0 = new Pose2d(x_prepare_for_stack, y_prepare_for_stack-4, Math.toRadians(angle_prepare));
         Pose2d interscore_0 =new Pose2d(x_inter_score-20,y_inter_score-4,Math.toRadians(angle_interscore));
+        Pose2d interscore_leftCaseAuto =new Pose2d(x_inter_score-25,y_inter_score-4,Math.toRadians(angle_interscore));
 
         Pose2d prepare_for_stack_score = new Pose2d(x_prepare_for_stack, y_prepare_for_stack, Math.toRadians(angle_prepare));
         Pose2d lung_de_linie_score = new Pose2d(x_lung_de_linie-4, y_lung_de_linie+5.5, Math.toRadians(angle_lung_de_linie));
@@ -227,7 +229,7 @@ public class BlueRightNearCenter extends LinearOpMode {
 
                 //.splineToLinearHeading(lung_de_linie_score, Math.toRadians(0))
                 .lineToLinearHeading(prepare_for_stack_score_0)
-                .lineToLinearHeading(interscore_0)
+                .lineToLinearHeading(interscore_leftCaseAuto)
                 .splineToLinearHeading(yellow_left, Math.toRadians(0))
                 //.splineToLinearHeading(yellow_right, Math.toRadians(270))
 //                .lineToLinearHeading(lung_de_linie)
@@ -369,9 +371,8 @@ public class BlueRightNearCenter extends LinearOpMode {
 //                .setTangent(Math.toRadians(0))
                 .build();
 
-        TrajectorySequence GO_STACK_LEFT_CICLU_1 = drive.trajectorySequenceBuilder(yellow_left)
-                .setTangent(90)
-                .splineToLinearHeading(prepare_for_stack, Math.toRadians(180))
+        TrajectorySequence GO_STACK_LEFT_CICLU_1 = drive.trajectorySequenceBuilder(yellow_right)
+                .lineToLinearHeading(prepare_for_stack2)
                 .lineToLinearHeading(inter)
                 //.lineToLinearHeading(lung_de_linie)
                 .lineToLinearHeading(
@@ -416,7 +417,7 @@ public class BlueRightNearCenter extends LinearOpMode {
 //                .splineToLinearHeading(stack, Math.toRadians(180))
                 .build();
 
-        TrajectorySequence GO_STACK_RIGHT = drive.trajectorySequenceBuilder(yellow_right)
+        TrajectorySequence GO_STACK_RIGHT = drive.trajectorySequenceBuilder(yellow_left)
                 .lineToLinearHeading(prepare_for_stack2)
                 .lineToLinearHeading(inter)
                 //.lineToLinearHeading(lung_de_linie)
@@ -474,7 +475,7 @@ public class BlueRightNearCenter extends LinearOpMode {
         ElapsedTime preload2 = new ElapsedTime();
         ElapsedTime collect2= new ElapsedTime();
         ElapsedTime drop = new ElapsedTime();
-        ElapsedTime drop2 = new ElapsedTime();
+        ElapsedTime park = new ElapsedTime();
 
         double nrcicluri = 0;
         collectAngle.stack_level = 4; //4
@@ -642,29 +643,43 @@ public class BlueRightNearCenter extends LinearOpMode {
                 case VERIF:
                 {
 
-                    if(r.left_pixel.getState() == FALSE && leftLatch.CS == leftLatch_Controller.leftLatchStatus.OPEN)
-                    {
-                        leftLatch.CS = leftLatch_Controller.leftLatchStatus.CLOSE_AUTO;
-                    }
-
-                    if(r.right_pixel.getState() == FALSE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.OPEN)
-                    {
-                        rightLatch.CS = rightLatch_Controller.rightLatchStatus.CLOSE_AUTO;
-                    }
-
-                    if((leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE) || collect.seconds() > 3)
-                    {
-                        //  r.collect.setPower(-1);
-                        //  outtake.CS = outtake_Controller.outtakeStatus.INTER;
-                        if(nrcicluri == 0)
-                        {status = STROBOT.GO_SCORE_YELLOW_PRELOAD_AND_PIXEL_FROM_STACK;}
-                        else if(nrcicluri == 1)
+                    if(nrcicluri < 2){
+                        if(r.left_pixel.getState() == FALSE && leftLatch.CS == leftLatch_Controller.leftLatchStatus.OPEN)
                         {
-                            status = STROBOT.GO_SCORE_YELLOW_PRELOAD_AND_PIXEL_FROM_STACK2;
+                            leftLatch.CS = leftLatch_Controller.leftLatchStatus.CLOSE_AUTO;
                         }
-                        else{
-                            drop2.reset();
-                            status = STROBOT.GO_DROP_WHITE_PIXELS;
+
+                        if(r.right_pixel.getState() == FALSE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.OPEN)
+                        {
+                            rightLatch.CS = rightLatch_Controller.rightLatchStatus.CLOSE_AUTO;
+                        }
+
+                        if((leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE) || collect.seconds() > 3)
+                        {
+                            //  r.collect.setPower(-1);
+                            //  outtake.CS = outtake_Controller.outtakeStatus.INTER;
+                            if(nrcicluri == 0)
+                            {status = STROBOT.GO_SCORE_YELLOW_PRELOAD_AND_PIXEL_FROM_STACK;}
+                            if(nrcicluri == 1)
+                            {
+                                status = STROBOT.GO_SCORE_YELLOW_PRELOAD_AND_PIXEL_FROM_STACK2;
+                            }
+                        }
+                    }
+                    if(nrcicluri == 2){
+                        if(r.left_pixel.getState() == FALSE && leftLatch.CS == leftLatch_Controller.leftLatchStatus.OPEN)
+                        {
+                            leftLatch.CS = leftLatch_Controller.leftLatchStatus.CLOSE_AUTO;
+                        }
+
+                        if(r.right_pixel.getState() == FALSE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.OPEN)
+                        {
+                            rightLatch.CS = rightLatch_Controller.rightLatchStatus.CLOSE_AUTO;
+                        }
+
+                        if((leftLatch.CS == leftLatch_Controller.leftLatchStatus.CLOSE_DONE && rightLatch.CS == rightLatch_Controller.rightLatchStatus.CLOSE_DONE) || collect.seconds() > 2)
+                        {
+                                status = STROBOT.GO_DROP_WHITE_PIXELS;
                         }
                     }
                     break;
@@ -697,6 +712,16 @@ public class BlueRightNearCenter extends LinearOpMode {
                 case GO_DROP_WHITE_PIXELS_SYSTEMS:{
                     blue_left.CurrentStatus = Blue_LEFT.autoControllerStatus.SCORE_26;
                     status = STROBOT.NOTHING;
+                    break;
+                }
+
+                case PARK_DOIPLUSCINCI:
+                {
+                    fourbar.CS = fourBar_Controller.fourbarStatus.COLLECT;
+                    if(park.seconds() > 0.1) {
+                        storage.CS = storage_Controller.storageStatus.COLLECT;
+                    }
+                    status = status.NOTHING;
                     break;
                 }
 
@@ -796,7 +821,7 @@ public class BlueRightNearCenter extends LinearOpMode {
 
                 case CHECK_COLLECT:
                 {
-                    if(nrcicluri < 1) //1
+                    if(nrcicluri < 2) //1
                     {
                         if(nrcicluri >0)
                         {lift.upCnt += 2;}
@@ -871,7 +896,7 @@ public class BlueRightNearCenter extends LinearOpMode {
             telemetry.addData("storage", storage.CS);
             telemetry.addData("stack", collectAngle.stack_level);
             telemetry.addData("left_pixel", r.left_pixel.getState());
-            telemetry.addData("nrcicluri", nrcicluri);
+            telemetry.addData("timer", park.seconds());
             telemetry.update();
 
         }
