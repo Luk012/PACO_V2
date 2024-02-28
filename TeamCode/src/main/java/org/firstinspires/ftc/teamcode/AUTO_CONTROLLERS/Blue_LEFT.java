@@ -113,11 +113,11 @@ public class Blue_LEFT {
             case SCORE_262:{
                 if(timer2.seconds() > 1.45)
                 {
-                    fourbar.CS = fourBar_Controller.fourbarStatus.SCORE;
+                    fourbar.CS = fourBar_Controller.fourbarStatus.PRELOAD_AUTO;
                 }
                 if(timer2.seconds() > 1.55)
                 {
-                    storage.CS = storage_Controller.storageStatus.SCORE;
+                    storage.CS = storage_Controller.storageStatus.PRELOAD_AUTO;
                 }
                 if(timer2.seconds() > 2.1)
                 {

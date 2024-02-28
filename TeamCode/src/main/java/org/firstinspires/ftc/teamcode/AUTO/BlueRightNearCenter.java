@@ -72,21 +72,21 @@ public class BlueRightNearCenter extends LinearOpMode {
     public static double x_purple_left = -18, y_purple_left = 34, angle_purple_left = 270;
     public static double x_purple_center = -38, y_purple_center = 29, angle_purple_center = 270;
     public static double x_purple_right = -45.3, y_purple_right = 40, angle_purple_right = 270;
-    public static double x_yellow_left = 38, y_yellow_left = 43, angle_yellow_left = 180;
+    public static double x_yellow_left = 38, y_yellow_left = 41, angle_yellow_left = 180;
     public static double x_yellow_center = 38, y_yellow_center = 36, angle_yellow_center = 180;
-    public static double x_yellow_right = 38, y_yellow_right = 30, angle_yellow_right = 180;
+    public static double x_yellow_right = 38, y_yellow_right = 32, angle_yellow_right = 180;
     public static double x_stack = -49, y_stack = 33, angle_stack = 180;
-    public static double stack_2_x = -51.3 , stack_2_y = 9.5, stack_2_angle = 180;
+    public static double stack_2_x = -51.3 , stack_2_y = 9, stack_2_angle = 180;
     public static double inter_x = -35.5, inter_y = 48, inter_angle = 270;
     public static double inter_x13 = -35.5, inter_y13 = 35.5, inter_angle13 = 270;
 
-    public static double x_interstack = -25, y_inetrstack = 9.5 , angle_interstack = 180;
-    public static double x_prepare_for_stack = -47.5, y_prepare_for_stack = 9.5, angle_prepare = 180;
+    public static double x_interstack = -25, y_inetrstack = 9 , angle_interstack = 180;
+    public static double x_prepare_for_stack = -47.5, y_prepare_for_stack = 9, angle_prepare = 180;
 
-    public static double x_prepare_for_stack2 = 30, y_prepare_for_stack2 = 9.5, angle_prepare2 = 180;
+    public static double x_prepare_for_stack2 = 30, y_prepare_for_stack2 = 9, angle_prepare2 = 180;
     public static double x_lung_de_linie = -25, y_lung_de_linie = 59, angle_lung_de_linie = 180;
     public static double x_park_from_right = 48, y_park_from_right = 62, angle_park_from_right = 180;
-    public static double x_inter_score = 40, y_inter_score=9.5, angle_interscore=180;
+    public static double x_inter_score = 40, y_inter_score=9, angle_interscore=180;
 
     int caz = 0;
     boolean ok  = FALSE;
@@ -154,6 +154,7 @@ public class BlueRightNearCenter extends LinearOpMode {
         Pose2d yellow_left = new Pose2d(x_yellow_left, y_yellow_left+1, Math.toRadians(angle_yellow_left));
         Pose2d stack = new Pose2d(x_stack - 6, y_stack, Math.toRadians(angle_stack));
         Pose2d stack2 = new Pose2d(x_stack - 6, y_stack, Math.toRadians(angle_stack));
+        Pose2d yellow_left_autoRightCase = new Pose2d(x_yellow_left, y_yellow_left-1, Math.toRadians(angle_yellow_left));
 
         Pose2d stack_michi = new Pose2d(stack_2_x, stack_2_y, Math.toRadians(stack_2_angle));
 
@@ -230,7 +231,7 @@ public class BlueRightNearCenter extends LinearOpMode {
                 //.splineToLinearHeading(lung_de_linie_score, Math.toRadians(0))
                 .lineToLinearHeading(prepare_for_stack_score_0)
                 .lineToLinearHeading(interscore_leftCaseAuto)
-                .splineToLinearHeading(yellow_left, Math.toRadians(0))
+                .lineToLinearHeading(yellow_left)
                 //.splineToLinearHeading(yellow_right, Math.toRadians(270))
 //                .lineToLinearHeading(lung_de_linie)
 //                .splineToLinearHeading(prepare_for_stack, Math.toRadians(180))
@@ -243,7 +244,7 @@ public class BlueRightNearCenter extends LinearOpMode {
                 //.splineToLinearHeading(lung_de_linie_score, Math.toRadians(0))
                 .lineToLinearHeading(prepare_for_stack_score)
                 .lineToLinearHeading(interscore)
-                .lineToLinearHeading(yellow_left)
+                .lineToLinearHeading(yellow_left_autoRightCase)
                 //.splineToLinearHeading(yellow_right, Math.toRadians(270))
 //                .lineToLinearHeading(lung_de_linie)
 //                .splineToLinearHeading(prepare_for_stack, Math.toRadians(180))
@@ -608,34 +609,18 @@ public class BlueRightNearCenter extends LinearOpMode {
                 }
 
                 case COLLECT: {
-                    if(nrcicluri == 0){
-                        if (collect2.seconds() > 0.35) {
-                            collect.reset();
-                            collectAngle.stack_level =4;
-                            status = STROBOT.VERIF;
-                        }
+                    if(collect.seconds() > 0.01 && nrcicluri == 0)
+                    {
+                        collectAngle.CS = collectAngle_Controller.collectAngleStatus.STACK;
+                        collectAngle.stack_level =4;
+                        status = STROBOT.VERIF;
                     }
-                    if(nrcicluri > 0){
-                        if(collect2.seconds() > 0.01)
-                        {
-                            collectAngle.CS = collectAngle_Controller.collectAngleStatus.LIFTED;
-                        }
-                        if (/*!drive.isBusy() || 4.5, 2.3*/ collect2.seconds() > 3.5) {
-                            r.collect.setPower(1);
-                            collectAngle.CS = collectAngle_Controller.collectAngleStatus.STACK;
-                            collect.reset();
-                            ok = FALSE;
-                            ok2 = FALSE;
-                            if(nrcicluri == 1)
-                            { collectAngle.stack_level =3;}
-                            else {
-                                collectAngle.stack_level =1;
-                                if(collect2.seconds() > 3.65){
-                                    collectAngle.stack_level = 0;
-                                }
-                            }
-                            status = STROBOT.VERIF;
-                        }
+                   else if (collect2.seconds() > 2) {
+                        r.collect.setPower(1);
+                        collectAngle.CS = collectAngle_Controller.collectAngleStatus.STACK;
+                        collect.reset();
+                         if(nrcicluri == 1){collectAngle.stack_level = 3;}else{ collectAngle.stack_level =0;}
+                        status = STROBOT.VERIF;
                     }
                     break;
                 }

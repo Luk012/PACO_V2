@@ -136,7 +136,7 @@ public class DriveToAprilTagAutonomous extends LinearOpMode
         telemetry.update();
         waitForStart();
 
-        while (opModeIsActive())
+        while (opModeIsActive() && !isStopRequested())
         {
             targetFound = false;
             desiredTag  = null;
@@ -170,7 +170,6 @@ public class DriveToAprilTagAutonomous extends LinearOpMode
                 telemetry.addData("Bearing","%3.0f degrees", desiredTag.ftcPose.bearing);
                 telemetry.addData("Yaw","%3.0f degrees", desiredTag.ftcPose.yaw);
 
-                sleep(5000);
 
                 // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
                 double  rangeError      = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
@@ -235,6 +234,8 @@ public class DriveToAprilTagAutonomous extends LinearOpMode
     private void initAprilTag() {
         // Create the AprilTag processor by using a builder.
         aprilTag = new AprilTagProcessor.Builder().build();
+
+
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
