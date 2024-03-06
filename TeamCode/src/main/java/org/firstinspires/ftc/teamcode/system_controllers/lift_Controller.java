@@ -19,13 +19,13 @@ public class lift_Controller {
     }
 
     public double CurrentSpeed=0;
-    public static double P1 = 0.007;
+    public static double P1 = 0.02;
     public static double I1 = 0.0001;
     public static double D1 = 0.01;
 
-    public static double P2 = 0.00133;
-    public static double I2 = 0;
-    public static double D2 = 0;
+    public static double P2 = 0.02;
+    public static double I2 = 0.0001;
+    public static double D2 = 0.01;
 
     public double pid = 0;
 
@@ -40,10 +40,10 @@ public class lift_Controller {
     int base = 0;
     int highest = 600;
 
-    public static double up = 0;
+    public static double up = 800;
     public static double down = -10;
     public static int upCnt = 0;
-    public static double MultiplicationIndex = 90;
+    public static double MultiplicationIndex = 250;
 
     public int CurrentPosition = 0;
 
@@ -78,7 +78,8 @@ public class lift_Controller {
 
         powerLiftFinal = (pid == 0) ? powerLiftDown : powerLiftUp;
 
-        r.lift.setPower(powerLiftFinal);
+        r.lift_left.setPower(powerLiftFinal);
+        r.lift_right.setPower(powerLiftFinal);
 
         if(CS != PS || CS == BASE )
         {

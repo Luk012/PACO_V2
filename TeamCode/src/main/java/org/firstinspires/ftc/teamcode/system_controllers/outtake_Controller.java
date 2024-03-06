@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controll
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.INTER2;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.INTER3;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.INTER4;
+import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.INTER_INTER;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.SCORE;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.SCORE2;
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.SCOREDONE;
@@ -15,8 +16,6 @@ import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controll
 import static org.firstinspires.ftc.teamcode.system_controllers.outtake_Controller.outtakeStatus.SECURE_LATCHES_FOR_2_PIXELS_DONE;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import java.io.BufferedReader;
 
 public class outtake_Controller {
     public enum outtakeStatus
@@ -35,6 +34,7 @@ public class outtake_Controller {
         SECURE_LATCHES_FOR_2_PIXELS,
         SECURE_LATCHES_FOR_2_PIXELS2,
         SECURE_LATCHES_FOR_2_PIXELS_DONE,
+        INTER_INTER,
     }
 
     public outtake_Controller()
@@ -50,11 +50,11 @@ public class outtake_Controller {
     ElapsedTime inter = new ElapsedTime();
     ElapsedTime latches = new ElapsedTime();
 
-    public void update(fourBar_Controller fourbar, storage_Controller storage, storageAngle_Controller storageAngle, lift_Controller lift, rightLatch_Controller right_latch, leftLatch_Controller left_latch)
+    public void update(fourBar_Controller fourbar, storage_Controller storage, lift_Controller lift, rightLatch_Controller right_latch, leftLatch_Controller left_latch)
     {
 
 
-            if(CS != PS || CS == INITIALIZE || CS == SCOREDONE || CS == COLLECTDONE || CS == SCORE || CS == SCORE2 || CS == COLLECT || CS == COLLECT2 || CS == INTER || CS == INTER2 || CS == INTER3 || CS == INTER4)
+            if(CS != PS || CS == INITIALIZE || CS == SCOREDONE || CS == COLLECTDONE || CS == SCORE || CS == SCORE2 || CS == COLLECT || CS == COLLECT2 || CS == INTER || CS == INTER2 || CS == INTER3 || CS == INTER4 || CS == INTER_INTER)
             {
                 switch (CS)
                 {
@@ -62,63 +62,40 @@ public class outtake_Controller {
                     case INTER:
                     {
                         fourbar.CS = fourBar_Controller.fourbarStatus.INTER;
-                        storage.CS = storage_Controller.storageStatus.INTER;
+                        latches.reset();
+                        CS = INTER_INTER;
                         break;
                     }
 
-                    case SCORE:
+                    case INTER_INTER:
                     {
-                        if(fourbar.CS == fourBar_Controller.fourbarStatus.INTER)
-                        {lift.pid = 1;
-                        lift.CS = lift_Controller.liftStatus.UP;
-                        score.reset();
-                       CS = SCORE2;} else
+                        if(latches.seconds() > 0.2)
                         {
-                            CS = outtakeStatus.INTER2;
-                        }
-                        break;
-                    }
-
-                    case INTER2:
-                    {
-                        fourbar.CS = fourBar_Controller.fourbarStatus.INTER;
-                        storage.CS = storage_Controller.storageStatus.INTER;
-                        inter.reset();
-                        CS = INTER3;
-                        break;
-                    }
-
-                    case INTER3:
-                    {
-                        if (inter.seconds() > 0.2)
-                        {
+                            lift.pid = 1;
+                            lift.CS = lift_Controller.liftStatus.UP;
+                            score.reset();
                             CS = SCORE;
                         }
                         break;
                     }
 
-                    case SCORE2:
+                    case SCORE:
                     {
                         if(score.seconds() > 0.2)
                         {
                             fourbar.CS = fourBar_Controller.fourbarStatus.SCORE;
-                        }
-                        if (score.seconds() > 0.4)
-                        {
                             storage.CS = storage_Controller.storageStatus.SCORE;
-                            CS = SCOREDONE;
                         }
-
                         break;
                     }
 
+
                     case COLLECT:
                     {
-                        storageAngle.rotation_i = 2;
-                        fourbar.CS = fourBar_Controller.fourbarStatus.INTER;
-                        storage.CS = storage_Controller.storageStatus.INTER;
+                        lift.pid = 0;
+                        lift.CS = lift_Controller.liftStatus.DOWN;
                         collect.reset();
-                        CS = INTER4;
+                        CS = COLLECT2;
                             break;
                     }
 
@@ -129,35 +106,6 @@ public class outtake_Controller {
                             fourbar.CS = fourBar_Controller.fourbarStatus.COLLECT;
                             storage.CS = storage_Controller.storageStatus.COLLECT;
                         }
-                        if(collect.seconds() > 0.6)
-                        {
-                            CS = COLLECTDONE;
-                        }
-                        break;
-                    }
-
-                    case INTER4:
-                    {
-                        if(collect.seconds() > 0.2)
-                        {
-                            lift.pid = 0;
-                            lift.CS = lift_Controller.liftStatus.DOWN;
-                            ;
-                        CS = COLLECT2;}
-                        break;
-                    }
-
-                    case SECURE_LATCHES_FOR_2_PIXELS:
-                    {
-                       fourbar.CS = fourBar_Controller.fourbarStatus.FOR_LATCHES;
-                       CS = SECURE_LATCHES_FOR_2_PIXELS2;
-                        break;
-                    }
-                    case SECURE_LATCHES_FOR_2_PIXELS2:
-                    {
-                        left_latch.CS = leftLatch_Controller.leftLatchStatus.CLOSE;
-                        right_latch.CS = rightLatch_Controller.rightLatchStatus.CLOSE;
-                        CS = SECURE_LATCHES_FOR_2_PIXELS_DONE;
                         break;
                     }
 

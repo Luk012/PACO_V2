@@ -33,7 +33,7 @@ public class PidControllerTest extends LinearOpMode {
 
     public static double maxSpeed = 1;
     public static double plm=0;
-    public static double RetractedPosition = 0 , ExtendedPosition = 207;
+    public static double RetractedPosition = 0 , ExtendedPosition = 600;
     int TargetLift = 0;
     ElapsedTime timerPID = new ElapsedTime();
 
@@ -63,11 +63,12 @@ public class PidControllerTest extends LinearOpMode {
             // if(plm==0)
             // SigurantaLiftController.CurrentStatus = SigurantaLiftController.SigurantaLift.JUNCTION;
 
-            int LiftPosition = robot.lift.getCurrentPosition();
+            int LiftPosition = robot.lift_right.getCurrentPosition();
             double powerLiftUP = up.update(LiftPosition);
 
             powerLiftUP = Math.max(-1,Math.min(powerLiftUP,1));
-            robot.lift.setPower(powerLiftUP);
+            robot.lift_right.setPower(powerLiftUP);
+            robot.lift_left.setPower(powerLiftUP);
 
 
 

@@ -10,107 +10,64 @@ import org.firstinspires.ftc.teamcode.globals.robotMap;
 @Config
 public class fourBar_Controller {
 
-    public final CoolServo left,right;
-
-    public static boolean reversedLeftServo = false, reversedRightServo = true;
-    public static double profileMaxVelocity = 16, profileAcceleration = 8, profileDeceleration = 10;
-
-
     public enum fourbarStatus
     {
         INITIALIZE,
         SCORE,
         COLLECT,
         INTER,
-        IK,
-        INTER_AUTO,
-        PRELOAD_AUTO,
-        FOR_LATCHES,
     }
 
     public fourBar_Controller(robotMap r){
-
-        left = new CoolServo(r.left_fourbar, reversedLeftServo, profileMaxVelocity, profileAcceleration, profileDeceleration, 1);
-        right = new CoolServo(r.right_fourbar, reversedRightServo, profileMaxVelocity, profileAcceleration, profileDeceleration, 1);
+        
         CS = INITIALIZE;
         PS = INITIALIZE;
     }
 
     public static fourbarStatus CS = INITIALIZE, PS = INITIALIZE;
 
-    public static double init = 0.865;
-    public static double inter = 0.79;
-    public static double up = 0.19;
-    public static double collect = 0.865;
-    public static double inverse_kinematics = 0.15;
-    public static double interauto = 0.5;
-    public static double score_preload_auto = 0.045;
+    public static double init = 0.2;
+    public static double up = 0.88;
+    public static double inter = 0.4;
+    public static double collect = 0.2;
 
     public void update(robotMap r)
     {
-        left.update();
-        right.update();
-
-        if(CS == fourbarStatus.IK)
-        {
-            right.setPosition(inverse_kinematics);
-            left.setPosition(inverse_kinematics);
-        }
+      
 
         if(CS != PS || CS == INITIALIZE)
         {
 
             switch(CS)
             {
-                case INITIALIZE:
-                {
-                    right.setPosition(init);
-                    left.setPosition(init);
-                    break;
-                }
 
                 case INTER:
                 {
-                    right.setPosition(inter);
-                    left.setPosition(inter);
+                    r.right_fourbar.setPosition(inter);
+                    r.left_fourbar.setPosition(inter);
+                    break;
+                }
+                case INITIALIZE:
+                {
+                    r.right_fourbar.setPosition(init);
+                    r.left_fourbar.setPosition(init);
                     break;
                 }
 
+
                 case SCORE:
                 {
-                    right.setPosition(up);
-                    left.setPosition(up);
+                    r.right_fourbar.setPosition(up);
+                    r.left_fourbar.setPosition(up);
                     break;
                 }
 
                 case COLLECT:
                 {
-                    right.setPosition(collect);
-                    left.setPosition(collect);
+                    r.right_fourbar.setPosition(collect);
+                    r.left_fourbar.setPosition(collect);
                     break;
                 }
-
-                case IK:
-                {
-                    right.setPosition(inverse_kinematics);
-                    left.setPosition(inverse_kinematics);
-                    break;
-                }
-
-                case INTER_AUTO:
-                {
-                    right.setPosition(interauto);
-                    left.setPosition(interauto);
-                    break;
-                }
-
-                case PRELOAD_AUTO:
-                {
-                    right.setPosition(score_preload_auto);
-                    left.setPosition(score_preload_auto);
-                    break;
-                }
-
             }
         }
 

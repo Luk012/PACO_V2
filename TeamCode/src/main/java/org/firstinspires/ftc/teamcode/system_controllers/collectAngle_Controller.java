@@ -13,7 +13,6 @@ public class collectAngle_Controller {
     {
         INITIALIZE,
         LIFTED,
-        STACK,
         GROUND,
     }
 
@@ -26,19 +25,11 @@ public class collectAngle_Controller {
     public static collectAngleStatus CS = INITIALIZE, PS = INITIALIZE;
 
     public static double init = 0;
-    public static double lifted = 0.6;
-    public static double ground = 0.38;
-
-    public static double stack[] = {0.1, 0.2, 0.28, 0.35, 0.44};
-
-    public int stack_level = 0;
+    public static double lifted = 1;
+    public static double ground = 0.55;
 
     public void update(robotMap r)
     {
-        if(CS == collectAngleStatus.STACK)
-        {
-            r.collect_angle.setPosition(stack[stack_level]);
-        }
 
                if(PS != CS || CS == INITIALIZE)
                {
@@ -53,12 +44,6 @@ public class collectAngle_Controller {
                        case LIFTED:
                        {
                            r.collect_angle.setPosition(lifted);
-                           break;
-                       }
-
-                       case STACK:
-                       {
-                           r.collect_angle.setPosition(stack[stack_level]);
                            break;
                        }
 

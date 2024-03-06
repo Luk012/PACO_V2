@@ -16,10 +16,7 @@ public class storage_Controller {
         INITIALZIE,
         COLLECT,
         SCORE,
-        INTER,
-        IK,
-        INTER_AUTO,
-        PRELOAD_AUTO,
+
     }
 
     public storage_Controller()
@@ -30,19 +27,13 @@ public class storage_Controller {
 
     public static storageStatus CS = storageStatus.INITIALZIE, PS = storageStatus.INITIALZIE;
 
-    public static double init = 0.35;
-    public static double inter = 0.28;
-    public static double collect = 0.35;
-    public static double score = 0.64;
-    public static double inverse_kinematics = 0.15;
-    public static double score_auto_preload = 0.6;
+    public static double init = 0.85;
+    public static double collect = 0.85;
+    public static double score = 0.14;
 
     public void update(robotMap r)
     {
-        if(CS == storageStatus.IK)
-        {
-            r.storage.setPosition(inverse_kinematics);
-        }
+
 
         if(PS != CS || CS == storageStatus.INITIALZIE)
         {
@@ -54,11 +45,7 @@ public class storage_Controller {
                     break;
                 }
 
-                case INTER:
-                {
-                    r.storage.setPosition(inter);
-                    break;
-                }
+
 
                 case SCORE:
                 {
@@ -70,17 +57,9 @@ public class storage_Controller {
                     r.storage.setPosition(collect);
                     break;
                 }
-                case IK:
-                {
-                    r.storage.setPosition(inverse_kinematics);
-                    break;
-                }
 
-                case PRELOAD_AUTO:
-                {
-                    r.storage.setPosition(score_auto_preload);
-                    break;
-                }
+
+
             }
 
             PS = CS;
